@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
   CheckCircle, Share2, Flag, Eye as EyeIcon, ArrowLeft
@@ -47,10 +48,10 @@ const PostThreadClient = () => {
     <div className="max-w-4xl mx-auto px-4 py-6">
       {/* Back Button */}
       <div className="mb-6">
-        <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+        <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
-        </a>
+        </Link>
       </div>
 
       {/* Main Post */}
@@ -173,7 +174,7 @@ const PostThreadClient = () => {
                     <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">Helper</span>
                     <span className="text-xs text-gray-500">1 hour ago</span>
                   </div>
-                  <p className="text-sm text-gray-700 mb-2">Great solution from MikeThePlumber! I've had this exact issue before and the flapper replacement worked perfectly.</p>
+                  <p className="text-sm text-gray-700 mb-2">Great solution from MikeThePlumber! I&apos;ve had this exact issue before and the flapper replacement worked perfectly.</p>
                   <div className="flex items-center gap-4">
                     <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600 transition">
                       <ThumbsUp className="w-3 h-3" />

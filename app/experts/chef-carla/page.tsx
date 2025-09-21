@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import Link from 'next/link';
 import {
   ArrowLeft, User, Calendar, MapPin, Award, MessageSquare,
   ThumbsUp, Clock, CheckCircle, Star, Settings, Share2,
@@ -16,10 +17,10 @@ const ChefCarlaProfile = () => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+              <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
                 <ArrowLeft className="w-5 h-5" />
                 <span className="font-bold">Back to Home</span>
-              </a>
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition">
@@ -157,7 +158,7 @@ const ChefCarlaProfile = () => {
                         <span className="text-xs font-bold text-gray-500">• 1.9k nods</span>
                       </div>
                       <p className="text-sm font-bold text-gray-700">
-                        Dense bread usually means over-kneading or not enough rise time. Let me help you troubleshoot - what's your current kneading technique and how long are you letting it rise?
+                        Dense bread usually means over-kneading or not enough rise time. Let me help you troubleshoot - what&apos;s your current kneading technique and how long are you letting it rise?
                       </p>
                     </div>
                   </div>

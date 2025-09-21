@@ -429,7 +429,7 @@ const DadKnowsHomepage = () => {
                   🧔
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-bold text-gray-900">Dad's Here to Help</h2>
+                  <h2 className="text-lg font-bold text-gray-900">Dad&apos;s Here to Help</h2>
                   <span className="text-xs font-bold text-green-600 flex items-center gap-1">
                     <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                     Currently helping 14 people
@@ -640,7 +640,7 @@ const DadKnowsHomepage = () => {
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-gray-900 flex items-center gap-2">
                     <Trophy className="w-5 h-5 text-orange-600" />
-                    Today's Champions
+                    Today&apos;s Champions
                   </h3>
                   <Link href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
                     View All

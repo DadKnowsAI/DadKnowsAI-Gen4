@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   TrendingUp, Clock, CheckCircle, Star, BookOpen,
@@ -39,10 +40,10 @@ const LoginPage = () => {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <a href="/" className="text-3xl font-bold text-blue-600 flex items-center justify-center gap-2 mb-2">
+          <Link href="/" className="text-3xl font-bold text-blue-600 flex items-center justify-center gap-2 mb-2">
             <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
             DadKnows
-          </a>
+          </Link>
           <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
           <p className="text-gray-600">Sign in to your account to continue helping others</p>
         </div>
@@ -159,7 +160,7 @@ const LoginPage = () => {
           {/* Sign up link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <a href="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
                 Sign up for free
               </a>
