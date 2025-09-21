@@ -1,26 +1,362 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Light Theme Base Styles */
+body {
+  background: #f9fafb; /* gray-50 */
+  color: #111827; /* gray-900 */
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  line-height: 1.6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Vintage OG Social Media Animations */
+@keyframes slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes bounce-in {
+  0% { 
+    transform: scale(0.8); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes vintage-glow {
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 25px rgba(0, 191, 255, 0.6); 
+  }
+}
+
+@keyframes xp-gain {
+  0% { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: translateY(-10px) scale(1.1); 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translateY(-20px) scale(1.2); 
+    opacity: 0; 
+  }
+}
+
+@keyframes badge-shine {
+  0% { 
+    background-position: -200% 0; 
+  }
+  100% { 
+    background-position: 200% 0; 
+  }
+}
+
+@keyframes typing-dots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-slide {
+  animation: slide 30s linear infinite;
+}
+
+.animate-vintage-glow {
+  animation: vintage-glow 2s infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease-out;
+}
+
+.animate-xp-gain {
+  animation: xp-gain 1s ease-out forwards;
+}
+
+.animate-badge-shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: badge-shine 2s infinite;
+}
+
+.animate-typing-dots span:nth-child(1) { animation-delay: 0s; }
+.animate-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.animate-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* EARLY 2000s COMPONENTS - Reddit-inspired Colors */
+.vintage-post {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-left: 4px solid var(--primary);
+  margin-bottom: 8px;
+  padding: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.vintage-post:hover {
+  border-left-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+.vintage-vote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 8px;
+  min-width: 40px;
+}
+
+/* FORCE VOTING COLORS - HIGHEST SPECIFICITY */
+div.vintage-vote div.vintage-upvote {
+  color: var(--accent) !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+}
+
+div.vintage-vote div.vintage-downvote {
+  color: var(--primary) !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+}
+
+div.vintage-vote div.vintage-score {
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: var(--text-primary) !important;
+  margin: 2px 0 !important;
+}
+
+/* UNIFORM CATEGORY BOXES */
+.category-box {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  margin: 2px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  border: 2px solid var(--border);
+}
+
+.category-box:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.category-box.red { 
+  background: var(--bg-card); 
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+.category-box.blue { 
+  background: var(--bg-card); 
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.vintage-header {
+  background: var(--primary);
+  color: white;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* EARLY 2000s CHAT BUBBLES */
+.vintage-chat-bubble {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.vintage-chat-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--bg-card);
+}
+
+.vintage-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.vintage-status.online { background: var(--success); }
+.vintage-status.idle { background: var(--warning); }
+.vintage-status.busy { background: var(--danger); }
+.vintage-status.offline { background: var(--text-muted); }
+
+.vintage-button {
+  background: var(--primary);
+  color: white;
+  border: 2px solid var(--primary);
+  padding: 8px 16px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vintage-button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.vintage-button.secondary {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.vintage-button.secondary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* UNIFORM BADGES & STATUS - High Contrast */
+.badge {
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--primary);
+}
+
+.badge.super-dad {
+  background: var(--accent);
+  border-color: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+.badge.rising-star {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.badge.expert {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.badge.neon {
+  background: var(--warning);
+  border-color: var(--warning);
+}
+
+/* UNIFORM STATUS INDICATORS - Reddit-inspired Colors */
+.status-online {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 1px var(--success);
+  animation: pulse 2s infinite;
+}
+
+.status-typing {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+  animation: pulse 1s infinite;
+}
+
+.status-busy {
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+}
+
+.status-offline {
+  width: 8px;
+  height: 8px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+}
+
+/* EARLY 2000s INPUT STYLING */
+.vintage-input {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  padding: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.vintage-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* UNIFORM CATEGORY TAGS */
+.category-tag {
+  background: var(--primary);
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  margin: 2px;
+  border: 1px solid var(--primary);
+}
+
+.category-tag:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.category-tag.home-repair { 
+  background: var(--primary); 
+  border-color: var(--primary);
+}
+.category-tag.cooking { 
+  background: var(--accent); 
+  border-color: var(--accent);
+}
+.category-tag.car-trouble { 
+  background: var(--primary-hover); 
+  border-color: var(--primary-hover);
+}
+.category-tag.parenting { 
+  background: var(--primary); 
+  border-color: var(--primary);
 }
