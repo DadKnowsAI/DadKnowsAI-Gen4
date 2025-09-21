@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
+  Wrench, Car, ChefHat, Baby,
   ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle, User
+  Circle, Lightbulb
 } from 'lucide-react';
 
 const DadKnowsHomepage = () => {
@@ -26,12 +27,6 @@ const DadKnowsHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleNod = (itemId: string) => {
-    setNodCounts(prev => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1
-    }));
-  };
 
   // Thread data for different filters
   const trendingThreads = [
@@ -242,10 +237,10 @@ const DadKnowsHomepage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
                 DadKnows
-              </a>
+              </Link>
               
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -258,22 +253,22 @@ const DadKnowsHomepage = () => {
             </div>
 
             <nav className="flex items-center gap-2">
-              <a href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+              <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                 <Home className="w-4 h-4" />
                 Home
-              </a>
-              <a href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+              </Link>
+              <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                 <Users className="w-4 h-4" />
                 Communities
-              </a>
-              <a href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+              </Link>
+              <Link href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                 <BookOpen className="w-4 h-4" />
                 Learn AI
-              </a>
-              <a href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+              </Link>
+              <Link href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                 <Trophy className="w-4 h-4" />
                 Rankings
-              </a>
+              </Link>
               
               <div className="ml-4 flex items-center gap-3 border-l border-gray-200 pl-4">
                 <button className="relative p-2 hover:bg-gray-100 rounded-lg">
@@ -319,9 +314,9 @@ const DadKnowsHomepage = () => {
                 <span className="text-sm font-bold">{nodsToday.toLocaleString()} nods given</span>
               </div>
             </div>
-            <a href="/chat" className="bg-white text-blue-600 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-blue-50 transition">
+            <Link href="/chat" className="bg-white text-blue-600 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-blue-50 transition">
               Ask Dad AI →
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -336,7 +331,7 @@ const DadKnowsHomepage = () => {
                 <h3 className="font-bold text-gray-900">Quick Help</h3>
               </div>
               <div className="p-2">
-                <a href="/categories/home-repair" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                <Link href="/categories/home-repair" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Wrench className="w-5 h-5 text-blue-600" />
                   </div>
@@ -345,8 +340,8 @@ const DadKnowsHomepage = () => {
                     <div className="text-xs font-bold text-gray-500">247 active</div>
                   </div>
                   <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </a>
-                <a href="/categories/cooking" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                </Link>
+                <Link href="/categories/cooking" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                     <ChefHat className="w-5 h-5 text-orange-600" />
                   </div>
@@ -355,8 +350,8 @@ const DadKnowsHomepage = () => {
                     <div className="text-xs font-bold text-gray-500">183 active</div>
                   </div>
                   <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </a>
-                <a href="/categories/car-trouble" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                </Link>
+                <Link href="/categories/car-trouble" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <Car className="w-5 h-5 text-green-600" />
                   </div>
@@ -365,8 +360,8 @@ const DadKnowsHomepage = () => {
                     <div className="text-xs font-bold text-gray-500">156 active</div>
                   </div>
                   <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </a>
-                <a href="/categories/parenting" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                </Link>
+                <Link href="/categories/parenting" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Baby className="w-5 h-5 text-purple-600" />
                   </div>
@@ -375,12 +370,12 @@ const DadKnowsHomepage = () => {
                     <div className="text-xs font-bold text-gray-500">94 active</div>
                   </div>
                   <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                </a>
+                </Link>
               </div>
               <div className="px-4 py-2 border-t border-gray-200">
-                <a href="/categories" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
+                <Link href="/categories" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
                   Browse all categories →
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -391,7 +386,7 @@ const DadKnowsHomepage = () => {
                 <Star className="w-4 h-4 text-yellow-500" />
               </div>
               <div className="p-2">
-                <a href="/experts/mike-the-plumber" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                <Link href="/experts/mike-the-plumber" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="relative">
                     <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
                       M
@@ -405,8 +400,8 @@ const DadKnowsHomepage = () => {
                       <span className="text-xs font-bold text-gray-500">2.8k nods</span>
                     </div>
                   </div>
-                </a>
-                <a href="/experts/chef-carla" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                </Link>
+                <Link href="/experts/chef-carla" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                   <div className="relative">
                     <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
                       C
@@ -420,7 +415,7 @@ const DadKnowsHomepage = () => {
                       <span className="text-xs font-bold text-gray-500">1.9k nods</span>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -440,20 +435,20 @@ const DadKnowsHomepage = () => {
                     Currently helping 14 people
                   </span>
                 </div>
-                <a href="/chat" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
+                <Link href="/chat" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
                   Open Full Chat →
-                </a>
+                </Link>
               </div>
               
               <div className="bg-white rounded-lg p-4 mb-4 min-h-[120px] border border-gray-200">
-                <p className="text-gray-700 mb-2 font-bold">Hey there! What's going on? Car trouble? Leaky faucet? Burnt dinner?</p>
-                <p className="text-gray-600 text-sm font-bold">I've got <span className="text-blue-600 font-bold">ChefCarla (2,847 nods)</span> and <span className="text-blue-600 font-bold">MikeThePlumber (1,923 nods)</span> standing by if we need expert backup!</p>
+                <p className="text-gray-700 mb-2 font-bold">Hey there! What&apos;s going on? Car trouble? Leaky faucet? Burnt dinner?</p>
+                <p className="text-gray-600 text-sm font-bold">I&apos;ve got <span className="text-blue-600 font-bold">ChefCarla (2,847 nods)</span> and <span className="text-blue-600 font-bold">MikeThePlumber (1,923 nods)</span> standing by if we need expert backup!</p>
               </div>
               
               <div className="relative">
                 <input 
                   type="text" 
-                  placeholder="Type your question here... (e.g., 'My toilet won't stop running')"
+                  placeholder="Type your question here... (e.g., &apos;My toilet won&apos;t stop running&apos;)"
                   className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 pr-20 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
@@ -471,15 +466,15 @@ const DadKnowsHomepage = () => {
               
               <div className="flex items-center justify-between mt-3">
                 <div className="flex gap-2">
-                  <a href="/categories/home-repair" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
+                  <Link href="/categories/home-repair" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🚿 Plumbing issue
-                  </a>
-                  <a href="/categories/cooking" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
+                  </Link>
+                  <Link href="/categories/cooking" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🍳 Cooking help
-                  </a>
-                  <a href="/categories/car-trouble" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
+                  </Link>
+                  <Link href="/categories/car-trouble" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🚗 Car problem
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -537,7 +532,7 @@ const DadKnowsHomepage = () => {
             {/* Feed Items */}
             <div className="space-y-4">
               {getCurrentThreads().map((thread) => (
-                <a key={thread.id} href={`/thread/${thread.id}`} className="block">
+                <Link key={thread.id} href={`/thread/${thread.id}`} className="block">
                   <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition cursor-pointer">
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-3">
@@ -632,7 +627,7 @@ const DadKnowsHomepage = () => {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -647,33 +642,33 @@ const DadKnowsHomepage = () => {
                     <Trophy className="w-5 h-5 text-orange-600" />
                     Today's Champions
                   </h3>
-                  <a href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
+                  <Link href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
                     View All
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="p-2 space-y-3">
-                <a href="/experts/electrician-ed" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 border-t-4 border-t-blue-500 hover:shadow-sm transition">
+                <Link href="/experts/electrician-ed" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 border-t-4 border-t-blue-500 hover:shadow-sm transition">
                   <span className="text-lg">🥇</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">ElectricianEd</div>
                     <div className="text-xs font-bold text-gray-500">847 nods • 42 helps</div>
                   </div>
-                </a>
-                <a href="/experts/chef-carla" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
+                </Link>
+                <Link href="/experts/chef-carla" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
                   <span className="text-lg">🥈</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">ChefCarla</div>
                     <div className="text-xs font-bold text-gray-500">623 nods • 31 helps</div>
                   </div>
-                </a>
-                <a href="/experts/mechanic-dave" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
+                </Link>
+                <Link href="/experts/mechanic-dave" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
                   <span className="text-lg">🥉</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">MechanicDave</div>
                     <div className="text-xs font-bold text-gray-500">512 nods • 28 helps</div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -686,7 +681,7 @@ const DadKnowsHomepage = () => {
                 </h3>
               </div>
               <div className="p-2 space-y-3">
-                <a href="/profile/newbiebob" className="block">
+                <Link href="/profile/newbiebob" className="block">
                   <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm text-gray-900">NewbieBob</span>
@@ -694,8 +689,8 @@ const DadKnowsHomepage = () => {
                     </div>
                     <p className="text-xs font-bold text-gray-600 mt-1">Killer HVAC tip on frozen pipes</p>
                   </div>
-                </a>
-                <a href="/profile/teachertina" className="block">
+                </Link>
+                <Link href="/profile/teachertina" className="block">
                   <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm text-gray-900">TeacherTina</span>
@@ -703,7 +698,7 @@ const DadKnowsHomepage = () => {
                     </div>
                     <p className="text-xs font-bold text-gray-600 mt-1">Trending in Parenting</p>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -714,11 +709,11 @@ const DadKnowsHomepage = () => {
                 Did You Know?
               </h3>
               <p className="text-sm font-bold text-gray-700">
-                WD-40 stands for "Water Displacement, 40th formula" - it took 40 attempts to get it right!
+                WD-40 stands for &quot;Water Displacement, 40th formula&quot; - it took 40 attempts to get it right!
               </p>
-              <a href="/education" className="text-sm text-blue-600 hover:text-blue-700 font-bold mt-2 inline-block">
+              <Link href="/education" className="text-sm text-blue-600 hover:text-blue-700 font-bold mt-2 inline-block">
                 Learn more tips →
-              </a>
+              </Link>
             </div>
           </div>
         </div>
