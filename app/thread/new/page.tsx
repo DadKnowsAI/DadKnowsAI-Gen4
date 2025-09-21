@@ -293,7 +293,7 @@ const NewThreadPage = () => {
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <div className="mb-4">
                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">
-                  {getCategoryById(category) ? getCategoryById(category).name : 'Uncategorized'}
+                  {getCategoryById(category)?.name || 'Uncategorized'}
                 </span>
                 {isUrgent && (
                   <span className="ml-2 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">

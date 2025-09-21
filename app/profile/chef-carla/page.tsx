@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import Link from 'next/link';
 import {
   ArrowLeft, User, Calendar, MapPin, Award, MessageSquare,
   ThumbsUp, Clock, CheckCircle, Star, Settings, Share2,
@@ -15,10 +16,10 @@ const ChefCarlaProfile = () => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+              <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
                 <ArrowLeft className="w-5 h-5" />
                 <span className="font-bold">Back to Home</span>
-              </a>
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition">
@@ -160,7 +161,7 @@ const ChefCarlaProfile = () => {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Sourdough starter dying - how to revive?</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Feed it twice daily with equal parts flour and water. Keep at room temp. If it's really bad, start fresh with a tablespoon of the old starter mixed into new flour/water.
+                  Feed it twice daily with equal parts flour and water. Keep at room temp. If it&apos;s really bad, start fresh with a tablespoon of the old starter mixed into new flour/water.
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-orange-600">

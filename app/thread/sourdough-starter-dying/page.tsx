@@ -113,15 +113,15 @@ const SourdoughStarterThread = () => {
             {/* Post Body */}
             <div className="text-gray-700 mb-4 space-y-3">
               <p className="font-bold text-lg">
-                My sourdough starter has been looking really sad lately. It's not bubbling much, smells a bit off, 
-                and the texture is wrong. I've been feeding it daily but it's just not coming back to life.
+                My sourdough starter has been looking really sad lately. It&apos;s not bubbling much, smells a bit off, 
+                and the texture is wrong. I&apos;ve been feeding it daily but it&apos;s just not coming back to life.
               </p>
               <p className="font-bold text-lg">
-                I've tried everything - different flours, different water temperatures, even moving it to different spots 
-                in my kitchen. Nothing seems to work and I'm about to give up on it.
+                I&apos;ve tried everything - different flours, different water temperatures, even moving it to different spots 
+                in my kitchen. Nothing seems to work and I&apos;m about to give up on it.
               </p>
               <p className="font-bold text-lg">
-                Help! This starter has been with me for 6 months and I don't want to lose it. 
+                Help! This starter has been with me for 6 months and I don&apos;t want to lose it. 
                 What am I doing wrong?
               </p>
             </div>
@@ -147,7 +147,7 @@ const SourdoughStarterThread = () => {
                     <span className="text-xs text-gray-500">• 1.9k nods</span>
                   </div>
                   <p className="text-gray-700 font-bold text-lg">
-                    I've saved 47 starters today! The key is feeding twice daily with equal parts flour and water. Keep at room temp (70-75°F). If it's really bad, start fresh with a tablespoon of the old starter mixed into new flour/water. Also try adding a pinch of sugar to give the yeast a boost!
+                    I&apos;ve saved 47 starters today! The key is feeding twice daily with equal parts flour and water. Keep at room temp (70-75°F). If it&apos;s really bad, start fresh with a tablespoon of the old starter mixed into new flour/water. Also try adding a pinch of sugar to give the yeast a boost!
                   </p>
                 </div>
               </div>

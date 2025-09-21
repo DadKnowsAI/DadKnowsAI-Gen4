@@ -155,18 +155,18 @@ const ThreadPage = () => {
 
             {/* Post Title */}
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Help! Water won't stop running in toilet!
+              Help! Water won&apos;t stop running in toilet!
             </h1>
 
             {/* Post Body */}
             <div className="text-gray-700 mb-4 space-y-3">
               <p className="font-bold text-lg">
-                I just bought my first house and the upstairs toilet won't stop running. The water keeps going and going. 
+                I just bought my first house and the upstairs toilet won&apos;t stop running. The water keeps going and going. 
                 I tried jiggling the handle but that only works for a few seconds.
               </p>
               <p className="font-bold text-lg">
-                It's driving me crazy and probably wasting tons of water. Is this something I can fix myself or do I need 
-                to call a plumber? I'm pretty handy but have never dealt with toilet repairs before.
+                It&apos;s driving me crazy and probably wasting tons of water. Is this something I can fix myself or do I need 
+                to call a plumber? I&apos;m pretty handy but have never dealt with toilet repairs before.
               </p>
               <p className="font-bold text-lg">
                 Any help would be appreciated! Thanks in advance, dads!
@@ -195,8 +195,8 @@ const ThreadPage = () => {
                   </div>
                   <p className="text-gray-700 font-bold text-lg">
                     Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, 
-                    then replace the rubber flapper. It's a $5 fix at any hardware store - takes 10 
-                    minutes max! Here's what you do:
+                    then replace the rubber flapper. It&apos;s a $5 fix at any hardware store - takes 10 
+                    minutes max! Here&apos;s what you do:
                   </p>
                   <ol className="mt-2 ml-4 space-y-1 text-sm text-gray-700 font-bold">
                     <li>1. Turn off the water valve (usually on the wall behind the toilet)</li>
@@ -343,7 +343,7 @@ const ThreadPage = () => {
                       <div className="mt-4 pl-4 border-l-2 border-gray-200 space-y-3">
                         {comment.replies.map((reply) => (
                           <div key={reply.id} className="flex items-start gap-2">
-                            <div className={`w-8 h-8 ${reply.isOP ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-orange-500 to-red-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
+                            <div className={`w-8 h-8 ${(reply as { isOP?: boolean }).isOP ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-orange-500 to-red-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
                               <User className="w-4 h-4" />
                             </div>
                             <div className="flex-1">

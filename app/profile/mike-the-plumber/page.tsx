@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import Link from 'next/link';
 import {
   ArrowLeft, User, Calendar, MapPin, Award, MessageSquare,
   ThumbsUp, Clock, CheckCircle, Star, Settings, Share2,
@@ -15,10 +16,10 @@ const MikeThePlumberProfile = () => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+              <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
                 <ArrowLeft className="w-5 h-5" />
                 <span className="font-bold">Back to Home</span>
-              </a>
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition">
@@ -125,9 +126,9 @@ const MikeThePlumberProfile = () => {
                   </div>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">Help! Water won't stop running in toilet!</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Help! Water won&apos;t stop running in toilet!</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It's a $5 fix at any hardware store - takes 10 minutes max!
+                  Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It&apos;s a $5 fix at any hardware store - takes 10 minutes max!
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-blue-600">

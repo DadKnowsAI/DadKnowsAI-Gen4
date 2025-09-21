@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   TrendingUp, Clock, CheckCircle, Star, BookOpen,
@@ -112,10 +113,10 @@ const ProfilePage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
                 DadKnows
-              </a>
+              </Link>
               
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -128,22 +129,22 @@ const ProfilePage = () => {
             </div>
 
             <nav className="flex items-center gap-2">
-              <a href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Home className="w-4 h-4" />
                 Home
-              </a>
-              <a href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Users className="w-4 h-4" />
                 Communities
-              </a>
-              <a href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <BookOpen className="w-4 h-4" />
                 Learn AI
-              </a>
-              <a href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Trophy className="w-4 h-4" />
                 Rankings
-              </a>
+              </Link>
               
               <div className="ml-4 flex items-center gap-3 border-l border-gray-200 pl-4">
                 <button className="relative p-2 hover:bg-gray-100 rounded-lg">
@@ -154,9 +155,9 @@ const ProfilePage = () => {
                   <MessageSquare className="w-5 h-5 text-gray-600" />
                   <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">3</span>
                 </button>
-                <a href="/profile" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                <Link href="/profile" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                   JD
-                </a>
+                </Link>
               </div>
             </nav>
           </div>

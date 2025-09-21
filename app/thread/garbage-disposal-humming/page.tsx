@@ -113,11 +113,11 @@ const GarbageDisposalThread = () => {
             {/* Post Body */}
             <div className="text-gray-700 mb-4 space-y-3">
               <p className="font-bold text-lg">
-                My disposal has been humming for 2 days and won't turn on. I tried everything - checked the circuit breaker, 
+                My disposal has been humming for 2 days and won&apos;t turn on. I tried everything - checked the circuit breaker, 
                 looked for jams, even tried the Allen wrench trick. Nothing worked.
               </p>
               <p className="font-bold text-lg">
-                Finally found the solution! There's a reset button on the bottom of most disposal units. 
+                Finally found the solution! There&apos;s a reset button on the bottom of most disposal units. 
                 Turn off the power, press the red reset button, then turn power back on. Fixed it instantly!
               </p>
               <p className="font-bold text-lg">
