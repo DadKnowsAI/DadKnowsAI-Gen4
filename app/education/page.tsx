@@ -2,10 +2,11 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, BookOpen,
   Brain, Lightbulb, HelpCircle, Shield, Zap, Target,
-  PlayCircle, CheckCircle, AlertCircle, TrendingUp,
+  PlayCircle, CheckCircle, AlertCircle,
   User, Bot, ThumbsUp, MessageCircle, ChevronRight,
   Sparkles, Lock, Unlock, Award, Clock, Star,
   ArrowRight, Info, BookMarked, Video, FileText
@@ -18,11 +19,11 @@ const EducationHub = () => {
   const lessons = {
     basics: [
       {
-        title: "AI Isn't Magic - It's Pattern Matching",
+        title: "AI Isn&apos;t Magic - It&apos;s Pattern Matching",
         duration: "5 min read",
         difficulty: "Beginner",
         icon: <Brain className="w-5 h-5" />,
-        description: "Think of AI like a really good recipe follower who's read millions of cookbooks",
+        description: "Think of AI like a really good recipe follower who&apos;s read millions of cookbooks",
         locked: false
       },
       {
@@ -48,7 +49,7 @@ const EducationHub = () => {
         duration: "8 min interactive",
         difficulty: "Intermediate",
         icon: <Target className="w-5 h-5" />,
-        description: "Be specific! 'Fix my car' vs 'My 2015 Honda Civic won't start, battery is new'",
+        description: "Be specific! &apos;Fix my car&apos; vs &apos;My 2015 Honda Civic won&apos;t start, battery is new&apos;",
         locked: false
       },
       {
@@ -82,7 +83,7 @@ const EducationHub = () => {
         duration: "5 min read",
         difficulty: "Important",
         icon: <Award className="w-5 h-5" />,
-        description: "How we make sure 'MikeThePlumber' is actually a plumber",
+        description: "How we make sure &apos;MikeThePlumber&apos; is actually a plumber",
         locked: false
       },
       {
@@ -103,19 +104,19 @@ const EducationHub = () => {
     },
     {
       question: "How does DadKnows verify experts are real?",
-      answer: "We use a multi-step process: credential verification, community vouching, track record analysis, and our 'Super Dad' experts do final vetting. It's like LinkedIn meets Reddit, but stricter."
+      answer: "We use a multi-step process: credential verification, community vouching, track record analysis, and our &apos;Super Dad&apos; experts do final vetting. It&apos;s like LinkedIn meets Reddit, but stricter."
     },
     {
       question: "Why should I trust AI-suggested experts?",
-      answer: "You shouldn't blindly! That's why we show you their track record, nod count, solved problems, and peer endorsements. The AI just helps match you - the proof is in the pudding (or fixed pipe)."
+      answer: "You shouldn&apos;t blindly! That&apos;s why we show you their track record, nod count, solved problems, and peer endorsements. The AI just helps match you - the proof is in the pudding (or fixed pipe)."
     },
     {
       question: "Can AI actually understand my specific problem?",
-      answer: "AI is great at recognizing patterns - 'toilet won't stop running' matches thousands of similar cases. But for nuanced issues, that's why we connect you to humans who can ask follow-up questions."
+      answer: "AI is great at recognizing patterns - &apos;toilet won&apos;t stop running&apos; matches thousands of similar cases. But for nuanced issues, that&apos;s why we connect you to humans who can ask follow-up questions."
     },
     {
       question: "What makes DadKnows different from ChatGPT?",
-      answer: "ChatGPT gives you its best guess. DadKnows connects you to ChefCarla who's actually made 1,000 soufflés. We cite real people with real experience, not just statistical predictions."
+      answer: "ChatGPT gives you its best guess. DadKnows connects you to ChefCarla who&apos;s actually made 1,000 soufflés. We cite real people with real experience, not just statistical predictions."
     }
   ];
 
@@ -141,20 +142,20 @@ const EducationHub = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">D</div>
                 DadKnows
-              </a>
+              </Link>
               
               <nav className="flex items-center gap-2 ml-8">
-                <a href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+                <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                   <Home className="w-4 h-4" />
                   Home
-                </a>
-                <a href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
+                </Link>
+                <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
                   <Users className="w-4 h-4" />
                   Communities
-                </a>
+                </Link>
                 <a href="/education" className="px-3 py-2 rounded-lg bg-blue-50 flex items-center gap-2 text-sm font-bold text-blue-700">
                   <BookOpen className="w-4 h-4" />
                   Learn AI
@@ -169,7 +170,7 @@ const EducationHub = () => {
       <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold mb-4">AI Doesn't Have to Be Confusing</h1>
+            <h1 className="text-4xl font-bold mb-4">AI Doesn&apos;t Have to Be Confusing</h1>
             <p className="text-xl font-bold text-blue-100 mb-6">
               Learn how AI actually works, when to trust it, and how DadKnows combines artificial intelligence with real human expertise.
             </p>

@@ -32,14 +32,14 @@ const ChatInterface = () => {
     {
       id: '1',
       type: 'bot',
-      content: "🎤 Hey there! I'm Dad, your friendly AI host! I connect you with REAL experts who've solved problems just like yours. What's troubling you today? Leaky pipe? Burnt dinner? Car making weird noises? Let me find the top-voted solutions from our verified experts!",
+      content: "🎤 Hey there! I&apos;m Dad, your friendly AI host! I connect you with REAL experts who&apos;ve solved problems just like yours. What&apos;s troubling you today? Leaky pipe? Burnt dinner? Car making weird noises? Let me find the top-voted solutions from our verified experts!",
       timestamp: new Date(),
       expertResponses: [
         {
           expertName: 'MikeThePlumber',
           expertBadge: 'Super Dad',
           nods: 2847,
-          response: "Click on any expert response to dive deeper into the conversation! I've helped solve thousands of plumbing issues with proven solutions.",
+          response: "Click on any expert response to dive deeper into the conversation! I&apos;ve helped solve thousands of plumbing issues with proven solutions.",
           successRate: '98%',
           timesSolved: 247
         },
@@ -85,14 +85,14 @@ const ChatInterface = () => {
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
-        content: "🎯 Great question! I've found the TOP community-verified solutions for this exact problem. Here's what our experts say:",
+        content: "🎯 Great question! I&apos;ve found the TOP community-verified solutions for this exact problem. Here&apos;s what our experts say:",
         timestamp: new Date(),
         expertResponses: [
           {
             expertName: 'MikeThePlumber',
             expertBadge: 'Super Dad',
             nods: 2847,
-            response: "Classic flapper valve issue! Turn off the water supply valve behind the toilet, flush to empty the tank, then replace the $5 rubber flapper from any hardware store. Takes 10 minutes max. I've fixed this exact issue 247 times!",
+            response: "Classic flapper valve issue! Turn off the water supply valve behind the toilet, flush to empty the tank, then replace the $5 rubber flapper from any hardware store. Takes 10 minutes max. I&apos;ve fixed this exact issue 247 times!",
             successRate: '98%',
             timesSolved: 247
           },
@@ -100,7 +100,7 @@ const ChatInterface = () => {
             expertName: 'HandymanHank',
             expertBadge: 'Pro',
             nods: 1923,
-            response: "Before replacing anything, try adjusting the chain length first - sometimes it's just too tight or loose. If the flapper looks warped or has mineral buildup, then replace it.",
+            response: "Before replacing anything, try adjusting the chain length first - sometimes it&apos;s just too tight or loose. If the flapper looks warped or has mineral buildup, then replace it.",
             successRate: '92%',
             timesSolved: 189
           },
@@ -108,7 +108,7 @@ const ChatInterface = () => {
             expertName: 'DIYDiana',
             expertBadge: 'Rising Star',
             nods: 892,
-            response: "Pro tip: While you're in there, add food coloring to the tank. If color appears in the bowl without flushing, you definitely have a flapper leak!",
+            response: "Pro tip: While you&apos;re in there, add food coloring to the tank. If color appears in the bowl without flushing, you definitely have a flapper leak!",
             successRate: '89%',
             timesSolved: 67
           }
@@ -123,7 +123,7 @@ const ChatInterface = () => {
         const followUp: Message = {
           id: (Date.now() + 2).toString(),
           type: 'bot',
-          content: "💡 MikeThePlumber's solution has helped 247 people with a 98% success rate! Want me to connect you directly with Mike for follow-up questions? Or should I find video tutorials for this fix?",
+          content: "💡 MikeThePlumber&apos;s solution has helped 247 people with a 98% success rate! Want me to connect you directly with Mike for follow-up questions? Or should I find video tutorials for this fix?",
           timestamp: new Date()
         };
         setMessages(prev => [...prev, followUp]);
@@ -146,10 +146,10 @@ const ChatInterface = () => {
   };
 
   const suggestedQuestions = [
-    { icon: <Wrench className="w-4 h-4" />, text: "My toilet won't stop running" },
+    { icon: <Wrench className="w-4 h-4" />, text: "My toilet won&apos;t stop running" },
     { icon: <ChefHat className="w-4 h-4" />, text: "Why is my bread always dense?" },
     { icon: <Car className="w-4 h-4" />, text: "Car making weird noise when turning" },
-    { icon: <Baby className="w-4 h-4" />, text: "3-year-old won't sleep through night" }
+    { icon: <Baby className="w-4 h-4" />, text: "3-year-old won&apos;t sleep through night" }
   ];
 
   return (
@@ -199,7 +199,7 @@ const ChatInterface = () => {
                     <span className="text-xs font-bold text-gray-900">Garbage disposal humming</span>
                     <span className="text-xs text-orange-600 font-bold">+342 nods</span>
                   </div>
-                  <p className="text-xs font-bold text-gray-600">ElectricianEd's reset button tip going viral</p>
+                  <p className="text-xs font-bold text-gray-600">ElectricianEd&apos;s reset button tip going viral</p>
                 </div>
               </Link>
               <Link href="/thread/sourdough-starter-dying" className="block">
@@ -432,7 +432,7 @@ const ChatInterface = () => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Describe your problem... (e.g., 'toilet keeps running' or 'bread too dense')"
+                placeholder="Describe your problem... (e.g., &apos;toilet keeps running&apos; or &apos;bread too dense&apos;)"
                 className="flex-1 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-bold"
               />
               <button
@@ -494,14 +494,14 @@ const ChatInterface = () => {
             </h4>
             <ul className="space-y-1 text-xs font-bold text-gray-700">
               <li>• Include your specific model/brand</li>
-              <li>• Mention what you've already tried</li>
+              <li>• Mention what you&apos;ve already tried</li>
               <li>• Add photos if possible</li>
               <li>• Specify your skill level</li>
             </ul>
           </div>
 
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
-            <h4 className="font-bold text-gray-900 mb-2 text-sm">Today's Stats</h4>
+            <h4 className="font-bold text-gray-900 mb-2 text-sm">Today&apos;s Stats</h4>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="font-bold text-gray-600">Problems Solved</span>

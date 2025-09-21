@@ -343,7 +343,7 @@ const ThreadPage = () => {
                       <div className="mt-4 pl-4 border-l-2 border-gray-200 space-y-3">
                         {comment.replies.map((reply) => (
                           <div key={reply.id} className="flex items-start gap-2">
-                            <div className={`w-8 h-8 ${(reply as any).isOP ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-orange-500 to-red-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
+                            <div className={`w-8 h-8 ${reply.isOP ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-orange-500 to-red-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
                               <User className="w-4 h-4" />
                             </div>
                             <div className="flex-1">

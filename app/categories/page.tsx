@@ -1,13 +1,12 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
+  BookOpen,
   Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus
+  Circle, ArrowLeft, Plus, Grid, List, ChevronRight, Award
 } from 'lucide-react';
 
 const CategoriesPage = () => {
@@ -154,10 +153,10 @@ const CategoriesPage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
                 DadKnows
-              </a>
+              </Link>
               
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -170,14 +169,14 @@ const CategoriesPage = () => {
             </div>
 
             <nav className="flex items-center gap-2">
-              <a href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Home className="w-4 h-4" />
                 Home
-              </a>
-              <a href="/categories" className="px-3 py-2 rounded-lg bg-blue-50 text-blue-600 flex items-center gap-2 text-sm font-medium">
+              </Link>
+              <Link href="/categories" className="px-3 py-2 rounded-lg bg-blue-50 text-blue-600 flex items-center gap-2 text-sm font-medium">
                 <Users className="w-4 h-4" />
                 Communities
-              </a>
+              </Link>
               <a href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <BookOpen className="w-4 h-4" />
                 Learn AI

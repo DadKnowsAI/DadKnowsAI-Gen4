@@ -31,10 +31,10 @@ const NewThreadPage = () => {
   ];
 
   const suggestedTitles = [
-    "Help! Water won't stop running in toilet!",
+    "Help! Water won&apos;t stop running in toilet!",
     "My car is making a weird clicking noise when I turn",
     "Burnt my dinner - any way to save it?",
-    "Baby won't sleep through the night - tried everything!",
+    "Baby won&apos;t sleep through the night - tried everything!",
     "Outlet sparking when I plug things in - dangerous?",
     "How do I fix a squeaky door hinge?"
   ];
@@ -50,11 +50,11 @@ const NewThreadPage = () => {
     window.location.href = '/thread/new-1';
   };
 
-  const handleQuickFill = (suggestion) => {
+  const handleQuickFill = (suggestion: string) => {
     setTitle(suggestion);
   };
 
-  const getCategoryById = (id) => {
+  const getCategoryById = (id: string) => {
     return categories.find(c => c.id === id);
   };
 
@@ -208,7 +208,7 @@ const NewThreadPage = () => {
                 {isUrgent && (
                   <div className="mt-3 p-2 bg-red-50 rounded-lg border border-red-200">
                     <p className="text-xs text-red-700">
-                      ⚠️ Only mark as urgent if it's a safety issue or needs immediate attention
+                      ⚠️ Only mark as urgent if it&apos;s a safety issue or needs immediate attention
                     </p>
                   </div>
                 )}
@@ -227,7 +227,7 @@ const NewThreadPage = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    <span>Include what you've already tried</span>
+                    <span>Include what you&apos;ve already tried</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
@@ -248,7 +248,7 @@ const NewThreadPage = () => {
               <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4">
                 <h3 className="font-bold text-sm text-gray-900 mb-2">Community Rules</h3>
                 <p className="text-xs text-gray-700 mb-2">
-                  DadKnows is a supportive community. We don't tolerate:
+                  DadKnows is a supportive community. We don&apos;t tolerate:
                 </p>
                 <ul className="space-y-1 text-xs text-gray-600">
                   <li>• Spam or self-promotion</li>
