@@ -1,16 +1,20 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   TrendingUp, Clock, CheckCircle, Star, BookOpen,
   Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
   ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
   Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus, Send
+  ArrowLeft, Filter, Grid, List, Plus, Send, User
 } from 'lucide-react';
 
-const CategoryPage = ({ params }: { params: { slug: string } }) => {
+const CategoryPage = () => {
+  const params = useParams();
+  const slug = params.slug as string;
   const [activeTab, setActiveTab] = useState('posts');
   const [nodCounts, setNodCounts] = useState<Record<string, number>>({});
 
@@ -57,7 +61,7 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
     }
   };
 
-  const category = categoryData[params.slug as keyof typeof categoryData] || categoryData['home-repair'];
+  const category = categoryData[slug as keyof typeof categoryData] || categoryData['home-repair'];
   const IconComponent = category.icon;
 
   const getColorClasses = (color: string) => {
@@ -217,11 +221,16 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+              <Link href="/thread/new" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Ask Question
-              </button>
-              <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+              </Link>
+              <button 
+                onClick={() => {
+                  alert('Welcome to the Home Repair community! You are now a member.');
+                }}
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+              >
                 Join Community
               </button>
             </div>
@@ -269,21 +278,23 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
             {activeTab === 'posts' && (
               <div className="space-y-4">
                 {posts.map((post) => (
-                  <div key={post.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition">
+                  <div key={post.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-blue-300 hover:shadow-md transition cursor-pointer" onClick={() => window.location.href = `/thread/${post.id}`}>
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <img src="/api/placeholder/40/40" alt="User" className="w-10 h-10 rounded-full" />
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            <User className="w-5 h-5" />
+                          </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-medium text-gray-900">{post.author}</span>
+                              <Link href="/profile/sarahm" className="font-bold text-gray-900 hover:text-blue-600 hover:underline text-lg">{post.author}</Link>
                               <span className="text-xs text-gray-500">{post.time}</span>
                               {post.solved && (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">SOLVED</span>
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
                               )}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className={`text-xs px-2 py-0.5 rounded font-medium ${getColorClasses(category.color)}`}>
+                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${getColorClasses(category.color)}`}>
                                 {post.category}
                               </span>
                             </div>
@@ -294,7 +305,7 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
                         </button>
                       </div>
 
-                      <h3 className="font-medium text-gray-900 mb-4">{post.title}</h3>
+                      <h3 className="font-bold text-gray-900 mb-4 text-xl">{post.title}</h3>
                       
                       {post.solved && post.solution && (
                         <div className="bg-green-50 rounded-lg p-4 mb-4 border border-green-200">
@@ -302,11 +313,11 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
                             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-sm text-gray-900">{post.expert}</span>
-                                <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-medium">Expert</span>
+                                <Link href="/profile/mike-the-plumber" className="font-bold text-sm text-gray-900 hover:text-blue-600 hover:underline">{post.expert}</Link>
+                                <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Expert</span>
                                 <span className="text-xs text-gray-500">• {post.expertNods} nods</span>
                               </div>
-                              <p className="text-sm text-gray-700">{post.solution}</p>
+                              <p className="text-sm text-gray-700 font-bold">{post.solution}</p>
                             </div>
                           </div>
                         </div>
@@ -314,19 +325,28 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
 
                       <div className="flex items-center gap-4">
                         <button 
-                          onClick={() => handleNod(post.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNod(post.id);
+                          }}
                           className={`flex items-center gap-1.5 text-sm ${nodCounts[post.id] ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'} transition`}
                         >
                           <ThumbsUp className={`w-4 h-4 ${nodCounts[post.id] ? 'fill-blue-600' : ''}`} />
-                          <span className="font-medium">{post.nods + (nodCounts[post.id] || 0)}</span>
+                          <span className="font-bold">{post.nods + (nodCounts[post.id] || 0)}</span>
                         </button>
-                        <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition">
+                        <button 
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition"
+                        >
                           <MessageCircle className="w-4 h-4" />
-                          <span>{post.comments}</span>
+                          <span className="font-bold">{post.comments}</span>
                         </button>
-                        <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-600 transition">
+                        <button 
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-600 transition"
+                        >
                           <Bookmark className="w-4 h-4" />
-                          <span>Save</span>
+                          <span className="font-bold">Save</span>
                         </button>
                       </div>
                     </div>
@@ -403,38 +423,44 @@ const CategoryPage = ({ params }: { params: { slug: string } }) => {
                   className="w-full p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
                 />
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                <Link href="/thread/new" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2">
                   <Send className="w-4 h-4" />
                   Post Question
-                </button>
+                </Link>
               </div>
             </div>
 
             {/* Online Members */}
             <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Online Now</h3>
+              <h3 className="font-bold text-gray-900 mb-3">Online Now</h3>
               <div className="space-y-2">
-                <div className="flex items-center gap-3">
+                <Link href="/profile/mike-the-plumber" className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-lg transition">
                   <div className="relative">
-                    <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full" />
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white">
+                      <User className="w-4 h-4" />
+                    </div>
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
                   </div>
-                  <span className="text-sm text-gray-900">MikeThePlumber</span>
-                </div>
-                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-gray-900 hover:text-blue-600">MikeThePlumber</span>
+                </Link>
+                <Link href="/profile/handymike" className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-lg transition">
                   <div className="relative">
-                    <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full" />
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white">
+                      <User className="w-4 h-4" />
+                    </div>
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
                   </div>
-                  <span className="text-sm text-gray-900">HandyMike</span>
-                </div>
-                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-gray-900 hover:text-blue-600">HandyMike</span>
+                </Link>
+                <Link href="/profile/safetyfirst" className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-lg transition">
                   <div className="relative">
-                    <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full" />
+                    <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white">
+                      <User className="w-4 h-4" />
+                    </div>
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-yellow-500 rounded-full border-2 border-white"></span>
                   </div>
-                  <span className="text-sm text-gray-900">SafetyFirst</span>
-                </div>
+                  <span className="text-sm font-bold text-gray-900 hover:text-blue-600">SafetyFirst</span>
+                </Link>
               </div>
             </div>
 

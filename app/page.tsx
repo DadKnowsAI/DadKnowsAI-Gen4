@@ -14,6 +14,7 @@ const DadKnowsHomepage = () => {
   const [nodsToday, setNodsToday] = useState(8293);
   const [expertsOnline, setExpertsOnline] = useState(247);
   const [nodCounts, setNodCounts] = useState<Record<string, number>>({});
+  const [activeFilter, setActiveFilter] = useState<'trending' | 'recent' | 'solved' | 'live'>('trending');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,6 +31,208 @@ const DadKnowsHomepage = () => {
       ...prev,
       [itemId]: (prev[itemId] || 0) + 1
     }));
+  };
+
+  // Thread data for different filters
+  const trendingThreads = [
+    {
+      id: '1',
+      author: 'SarahM',
+      time: '2 minutes ago',
+      category: 'Plumbing',
+      solved: true,
+      title: 'Help! Water won\'t stop running in toilet!',
+      expert: 'MikeThePlumber',
+      expertNods: '2.8k',
+      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
+      nods: 127,
+      comments: 8,
+      avatar: 'S',
+      avatarColor: 'from-blue-500 to-purple-600',
+      typing: false
+    },
+    {
+      id: '2',
+      author: 'DavidK',
+      time: '5 minutes ago',
+      category: 'Cooking',
+      solved: false,
+      title: 'My bread keeps coming out dense. What am I doing wrong?',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 45,
+      comments: 12,
+      avatar: 'D',
+      avatarColor: 'from-green-500 to-teal-600',
+      typing: true
+    }
+  ];
+
+  const recentThreads = [
+    {
+      id: '3',
+      author: 'NewbieBob',
+      time: '1 minute ago',
+      category: 'Electrical',
+      solved: false,
+      title: 'Light switch making buzzing sound - is this dangerous?',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 23,
+      comments: 5,
+      avatar: 'N',
+      avatarColor: 'from-yellow-500 to-orange-600',
+      typing: false
+    },
+    {
+      id: '4',
+      author: 'HandyMike',
+      time: '3 minutes ago',
+      category: 'Home Repair',
+      solved: false,
+      title: 'Drywall repair techniques for beginners',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 67,
+      comments: 9,
+      avatar: 'H',
+      avatarColor: 'from-purple-500 to-pink-600',
+      typing: false
+    },
+    {
+      id: '1',
+      author: 'SarahM',
+      time: '2 minutes ago',
+      category: 'Plumbing',
+      solved: true,
+      title: 'Help! Water won\'t stop running in toilet!',
+      expert: 'MikeThePlumber',
+      expertNods: '2.8k',
+      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
+      nods: 127,
+      comments: 8,
+      avatar: 'S',
+      avatarColor: 'from-blue-500 to-purple-600',
+      typing: false
+    }
+  ];
+
+  const solvedThreads = [
+    {
+      id: '1',
+      author: 'SarahM',
+      time: '2 minutes ago',
+      category: 'Plumbing',
+      solved: true,
+      title: 'Help! Water won\'t stop running in toilet!',
+      expert: 'MikeThePlumber',
+      expertNods: '2.8k',
+      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
+      nods: 127,
+      comments: 8,
+      avatar: 'S',
+      avatarColor: 'from-blue-500 to-purple-600',
+      typing: false
+    },
+    {
+      id: '5',
+      author: 'TeacherTina',
+      time: '1 hour ago',
+      category: 'Cooking',
+      solved: true,
+      title: 'How do I fix overcooked pasta?',
+      expert: 'ChefCarla',
+      expertNods: '1.9k',
+      solution: 'Try rinsing with cold water to stop cooking, then reheat gently in sauce. For future, test pasta 2 minutes before package time!',
+      nods: 89,
+      comments: 15,
+      avatar: 'T',
+      avatarColor: 'from-indigo-500 to-blue-600',
+      typing: false
+    },
+    {
+      id: '6',
+      author: 'SafetyFirst',
+      time: '2 hours ago',
+      category: 'Electrical',
+      solved: true,
+      title: 'GFCI outlet keeps tripping - troubleshooting help?',
+      expert: 'ElectricianEd',
+      expertNods: '3.2k',
+      solution: 'Check for moisture first, then test appliances one by one. If it trips immediately, you likely have a ground fault. Call a licensed electrician if unsure!',
+      nods: 156,
+      comments: 23,
+      avatar: 'S',
+      avatarColor: 'from-red-500 to-pink-600',
+      typing: false
+    }
+  ];
+
+  const liveFeedThreads = [
+    {
+      id: '7',
+      author: 'QuickFix',
+      time: '30 seconds ago',
+      category: 'Plumbing',
+      solved: false,
+      title: 'Kitchen sink clogged - need immediate help!',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 12,
+      comments: 3,
+      avatar: 'Q',
+      avatarColor: 'from-red-500 to-pink-600',
+      typing: true
+    },
+    {
+      id: '8',
+      author: 'EmergencyMom',
+      time: '1 minute ago',
+      category: 'Cooking',
+      solved: false,
+      title: 'Baby food too hot - how to cool quickly?',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 8,
+      comments: 2,
+      avatar: 'E',
+      avatarColor: 'from-orange-500 to-yellow-600',
+      typing: true
+    },
+    {
+      id: '9',
+      author: 'UrgentDad',
+      time: '2 minutes ago',
+      category: 'Electrical',
+      solved: false,
+      title: 'Power went out - circuit breaker keeps tripping',
+      expert: null,
+      expertNods: null,
+      solution: null,
+      nods: 15,
+      comments: 4,
+      avatar: 'U',
+      avatarColor: 'from-yellow-500 to-orange-600',
+      typing: true
+    }
+  ];
+
+  const getCurrentThreads = () => {
+    switch (activeFilter) {
+      case 'recent':
+        return recentThreads;
+      case 'solved':
+        return solvedThreads;
+      case 'live':
+        return liveFeedThreads;
+      default:
+        return trendingThreads;
+    }
   };
 
   return (
@@ -96,15 +299,23 @@ const DadKnowsHomepage = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <Circle className="w-2 h-2 fill-green-400 text-green-400 animate-pulse" />
+                <Circle className="w-2 h-2 fill-green-500 text-green-500 animate-pulse" />
                 <span className="text-sm font-bold">{expertsOnline} experts online</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" />
+                <div className="w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
                 <span className="text-sm font-bold">{solvedToday.toLocaleString()} solved today</span>
               </div>
               <div className="flex items-center gap-2">
-                <ThumbsUp className="w-4 h-4" />
+                <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.754a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                  </svg>
+                </div>
                 <span className="text-sm font-bold">{nodsToday.toLocaleString()} nods given</span>
               </div>
             </div>
@@ -121,7 +332,7 @@ const DadKnowsHomepage = () => {
           <div className="col-span-3">
             {/* Quick Categories */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200">
+              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
                 <h3 className="font-bold text-gray-900">Quick Help</h3>
               </div>
               <div className="p-2">
@@ -175,7 +386,7 @@ const DadKnowsHomepage = () => {
 
             {/* Top Experts Online */}
             <div className="bg-white rounded-xl border border-gray-200 mt-4 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+              <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-blue-50">
                 <h3 className="font-bold text-gray-900">Top Experts Online</h3>
                 <Star className="w-4 h-4 text-yellow-500" />
               </div>
@@ -260,180 +471,203 @@ const DadKnowsHomepage = () => {
               
               <div className="flex items-center justify-between mt-3">
                 <div className="flex gap-2">
-                  <button className="text-xs bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition">
+                  <a href="/categories/home-repair" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🚿 Plumbing issue
-                  </button>
-                  <button className="text-xs bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition">
+                  </a>
+                  <a href="/categories/cooking" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🍳 Cooking help
-                  </button>
-                  <button className="text-xs bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition">
+                  </a>
+                  <a href="/categories/car-trouble" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
                     🚗 Car problem
-                  </button>
+                  </a>
                 </div>
-                <span className="text-xs font-bold text-gray-500">Avg response: 12 seconds</span>
               </div>
             </div>
 
             {/* Feed Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
-                <button className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-gray-200 text-sm font-bold text-gray-700 hover:bg-gray-50">
+                <button 
+                  onClick={() => setActiveFilter('trending')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
+                    activeFilter === 'trending' 
+                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
                   <TrendingUp className="w-4 h-4" />
                   Trending
                 </button>
-                <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-gray-500 hover:text-gray-700">
+                <button 
+                  onClick={() => setActiveFilter('recent')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
+                    activeFilter === 'recent' 
+                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
                   <Clock className="w-4 h-4" />
                   Recent
                 </button>
-                <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-gray-500 hover:text-gray-700">
+                <button 
+                  onClick={() => setActiveFilter('solved')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
+                    activeFilter === 'solved' 
+                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
                   <CheckCircle className="w-4 h-4" />
                   Solved
                 </button>
+                <button 
+                  onClick={() => setActiveFilter('live')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
+                    activeFilter === 'live' 
+                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                  Live Feed
+                </button>
               </div>
-              <span className="text-xs font-bold text-gray-500 flex items-center gap-1">
-                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                Live Feed
-              </span>
             </div>
 
             {/* Feed Items */}
             <div className="space-y-4">
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition">
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                        S
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-gray-900">SarahM</span>
-                          <span className="text-xs font-bold text-gray-500">2 minutes ago</span>
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
+              {getCurrentThreads().map((thread) => (
+                <a key={thread.id} href={`/thread/${thread.id}`} className="block">
+                  <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition cursor-pointer">
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 bg-gradient-to-br ${thread.avatarColor} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
+                            {thread.avatar}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-gray-900">{thread.author}</span>
+                              <span className="text-xs font-bold text-gray-500">{thread.time}</span>
+                              {thread.solved && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
+                              )}
+                              {thread.typing && (
+                                <span className="text-xs text-orange-500 flex items-center gap-1">
+                                  <Circle className="w-1.5 h-1.5 fill-orange-500" />
+                                  3 experts typing...
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${
+                                thread.category === 'Plumbing' ? 'bg-blue-100 text-blue-700' :
+                                thread.category === 'Cooking' ? 'bg-orange-100 text-orange-700' :
+                                thread.category === 'Electrical' ? 'bg-yellow-100 text-yellow-700' :
+                                thread.category === 'Home Repair' ? 'bg-purple-100 text-purple-700' :
+                                'bg-gray-100 text-gray-700'
+                              }`}>
+                                {thread.category}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">Plumbing</span>
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <MoreHorizontal className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      <h3 className="font-bold text-gray-900 mb-2">{thread.title}</h3>
+                      
+                      {thread.solved && thread.solution && (
+                        <div className="bg-green-50 rounded-lg p-3 mb-3 border border-green-200">
+                          <div className="flex items-start gap-2 mb-2">
+                            <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-bold text-sm text-gray-900">{thread.expert}</span>
+                                <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Super Dad</span>
+                                <span className="text-xs font-bold text-gray-500">• {thread.expertNods} nods</span>
+                              </div>
+                              <p className="text-sm font-bold text-gray-700">
+                                {thread.solution}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {thread.typing && (
+                        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                          <div className="flex items-center gap-2">
+                            <div className="flex -space-x-2">
+                              <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-red-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
+                                C
+                              </div>
+                              <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
+                                B
+                              </div>
+                              <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
+                                G
+                              </div>
+                            </div>
+                            <span className="text-xs font-bold text-gray-600">ChefCarla, BakerBeth, and GrandmaGrace are crafting responses...</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-4">
+                        <div className={`flex items-center gap-1.5 text-sm ${nodCounts[`item${thread.id}`] ? 'text-blue-600' : 'text-gray-500'} transition`}>
+                          <ThumbsUp className={`w-4 h-4 ${nodCounts[`item${thread.id}`] ? 'fill-blue-600' : ''}`} />
+                          <span className="font-bold">{thread.nods + (nodCounts[`item${thread.id}`] || 0)}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                          <MessageCircle className="w-4 h-4" />
+                          <span className="font-bold">{thread.comments}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                          <Bookmark className="w-4 h-4" />
+                          <span className="font-bold">Save</span>
                         </div>
                       </div>
                     </div>
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <MoreHorizontal className="w-5 h-5" />
-                    </button>
                   </div>
-
-                  <h3 className="font-bold text-gray-900 mb-2">Help! Water won't stop running in toilet!</h3>
-                  
-                  <div className="bg-green-50 rounded-lg p-3 mb-3 border border-green-200">
-                    <div className="flex items-start gap-2 mb-2">
-                      <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-bold text-sm text-gray-900">MikeThePlumber</span>
-                          <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Super Dad</span>
-                          <span className="text-xs font-bold text-gray-500">• 2.8k nods</span>
-                        </div>
-                        <p className="text-sm font-bold text-gray-700">
-                          Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It's a $5 fix at any hardware store - takes 10 minutes max!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <button 
-                      onClick={(e) => { e.preventDefault(); handleNod('item1'); }}
-                      className={`flex items-center gap-1.5 text-sm ${nodCounts.item1 ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'} transition`}
-                    >
-                      <ThumbsUp className={`w-4 h-4 ${nodCounts.item1 ? 'fill-blue-600' : ''}`} />
-                      <span className="font-bold">{127 + (nodCounts.item1 || 0)}</span>
-                    </button>
-                    <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition">
-                      <MessageCircle className="w-4 h-4" />
-                      <span>8</span>
-                    </button>
-                    <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-600 transition">
-                      <Bookmark className="w-4 h-4" />
-                      <span>Save</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition">
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                        D
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-gray-900">DavidK</span>
-                          <span className="text-xs font-bold text-gray-500">5 minutes ago</span>
-                          <span className="text-xs text-orange-500 flex items-center gap-1">
-                            <Circle className="w-1.5 h-1.5 fill-orange-500" />
-                            3 experts typing...
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold">Cooking</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <h3 className="font-bold text-gray-900 mb-3">My bread keeps coming out dense. What am I doing wrong?</h3>
-                  
-                  <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                    <div className="flex items-center gap-2">
-                      <div className="flex -space-x-2">
-                        <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-red-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                          C
-                        </div>
-                        <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                          B
-                        </div>
-                        <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                          G
-                        </div>
-                      </div>
-                      <span className="text-xs font-bold text-gray-600">ChefCarla, BakerBeth, and GrandmaGrace are crafting responses...</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </a>
+              ))}
             </div>
           </div>
 
           {/* Right Sidebar */}
           <div className="col-span-3">
             {/* Today's Champions */}
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200 p-4 mb-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-orange-600" />
-                  Today's Champions
-                </h3>
-                <a href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
-                  View All
-                </a>
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-orange-600" />
+                    Today's Champions
+                  </h3>
+                  <a href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
+                    View All
+                  </a>
+                </div>
               </div>
-              <div className="space-y-2">
-                <a href="/experts/electrician-ed" className="flex items-center gap-3 p-2 bg-white rounded-lg hover:shadow-sm transition">
+              <div className="p-2 space-y-3">
+                <a href="/experts/electrician-ed" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 border-t-4 border-t-blue-500 hover:shadow-sm transition">
                   <span className="text-lg">🥇</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">ElectricianEd</div>
                     <div className="text-xs font-bold text-gray-500">847 nods • 42 helps</div>
                   </div>
                 </a>
-                <a href="/experts/chef-carla" className="flex items-center gap-3 p-2 bg-white rounded-lg hover:shadow-sm transition">
+                <a href="/experts/chef-carla" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
                   <span className="text-lg">🥈</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">ChefCarla</div>
                     <div className="text-xs font-bold text-gray-500">623 nods • 31 helps</div>
                   </div>
                 </a>
-                <a href="/experts/mechanic-dave" className="flex items-center gap-3 p-2 bg-white rounded-lg hover:shadow-sm transition">
+                <a href="/experts/mechanic-dave" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
                   <span className="text-lg">🥉</span>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-gray-900">MechanicDave</div>
@@ -444,31 +678,37 @@ const DadKnowsHomepage = () => {
             </div>
 
             {/* Rising Stars */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-3">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-                Rising Stars
-              </h3>
-              <div className="space-y-2">
-                <div className="p-2 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-sm text-gray-900">NewbieBob</span>
-                    <span className="text-xs text-green-600 font-bold">+342 today</span>
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mt-6">
+              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
+                <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  Rising Stars
+                </h3>
+              </div>
+              <div className="p-2 space-y-3">
+                <a href="/profile/newbiebob" className="block">
+                  <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-sm text-gray-900">NewbieBob</span>
+                      <span className="text-xs text-green-600 font-bold">+342 today</span>
+                    </div>
+                    <p className="text-xs font-bold text-gray-600 mt-1">Killer HVAC tip on frozen pipes</p>
                   </div>
-                  <p className="text-xs font-bold text-gray-600 mt-1">Killer HVAC tip on frozen pipes</p>
-                </div>
-                <div className="p-2 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-sm text-gray-900">TeacherTina</span>
-                    <span className="text-xs text-green-600 font-bold">+289 today</span>
+                </a>
+                <a href="/profile/teachertina" className="block">
+                  <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-sm text-gray-900">TeacherTina</span>
+                      <span className="text-xs text-green-600 font-bold">+289 today</span>
+                    </div>
+                    <p className="text-xs font-bold text-gray-600 mt-1">Trending in Parenting</p>
                   </div>
-                  <p className="text-xs font-bold text-gray-600 mt-1">Trending in Parenting</p>
-                </div>
+                </a>
               </div>
             </div>
 
             {/* Quick Tip */}
-            <div className="bg-blue-50 rounded-xl border border-blue-200 p-4">
+            <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 mt-6">
               <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2">
                 <Lightbulb className="w-5 h-5 text-blue-600" />
                 Did You Know?

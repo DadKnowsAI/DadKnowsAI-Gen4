@@ -34,6 +34,24 @@ const ChatInterface = () => {
       type: 'bot',
       content: "🎤 Hey there! I'm Dad, your friendly AI host! I connect you with REAL experts who've solved problems just like yours. What's troubling you today? Leaky pipe? Burnt dinner? Car making weird noises? Let me find the top-voted solutions from our verified experts!",
       timestamp: new Date(),
+      expertResponses: [
+        {
+          expertName: 'MikeThePlumber',
+          expertBadge: 'Super Dad',
+          nods: 2847,
+          response: "Click on any expert response to dive deeper into the conversation! I've helped solve thousands of plumbing issues with proven solutions.",
+          successRate: '98%',
+          timesSolved: 247
+        },
+        {
+          expertName: 'ChefCarla',
+          expertBadge: 'Pro Chef',
+          nods: 1923,
+          response: "Try clicking on my response to see how our conversation threads work! I specialize in cooking solutions that actually work.",
+          successRate: '95%',
+          timesSolved: 189
+        }
+      ]
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -175,20 +193,24 @@ const ChatInterface = () => {
               Trending Now
             </h3>
             <div className="space-y-2">
-              <div className="p-2 bg-orange-50 rounded-lg border border-orange-200">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-gray-900">Garbage disposal humming</span>
-                  <span className="text-xs text-orange-600 font-bold">+342 nods</span>
+              <Link href="/thread/garbage-disposal-humming" className="block">
+                <div className="p-2 bg-orange-50 rounded-lg border border-orange-200 hover:bg-orange-100 hover:border-orange-300 transition cursor-pointer">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-gray-900">Garbage disposal humming</span>
+                    <span className="text-xs text-orange-600 font-bold">+342 nods</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-600">ElectricianEd's reset button tip going viral</p>
                 </div>
-                <p className="text-xs font-bold text-gray-600">ElectricianEd's reset button tip going viral</p>
-              </div>
-              <div className="p-2 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-gray-900">Sourdough starter dying</span>
-                  <span className="text-xs text-green-600 font-bold">+289 nods</span>
+              </Link>
+              <Link href="/thread/sourdough-starter-dying" className="block">
+                <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 hover:border-green-300 transition cursor-pointer">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-gray-900">Sourdough starter dying</span>
+                    <span className="text-xs text-green-600 font-bold">+289 nods</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-600">BakerBeth saved 47 starters today!</p>
                 </div>
-                <p className="text-xs font-bold text-gray-600">BakerBeth saved 47 starters today!</p>
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -198,28 +220,32 @@ const ChatInterface = () => {
               Top Experts Online Now
             </h3>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>
-                <div className="flex-1">
-                  <div className="text-sm font-bold text-gray-900">MikeThePlumber</div>
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs font-bold">Super Dad</span>
-                    <span className="font-bold text-gray-500">247 helps today</span>
+              <Link href="/profile/mike-the-plumber" className="block">
+                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 hover:shadow-sm transition cursor-pointer">
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>
+                  <div className="flex-1">
+                    <div className="text-sm font-bold text-gray-900 hover:text-blue-600">MikeThePlumber</div>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs font-bold">Super Dad</span>
+                      <span className="font-bold text-gray-500">247 helps today</span>
+                    </div>
                   </div>
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 </div>
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              </div>
-              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white text-xs font-bold">C</div>
-                <div className="flex-1">
-                  <div className="text-sm font-bold text-gray-900">ChefCarla</div>
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="bg-orange-100 text-orange-700 px-1 py-0.5 rounded text-xs font-bold">Pro Chef</span>
-                    <span className="font-bold text-gray-500">183 helps today</span>
+              </Link>
+              <Link href="/profile/chef-carla" className="block">
+                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 hover:shadow-sm transition cursor-pointer">
+                  <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white text-xs font-bold">C</div>
+                  <div className="flex-1">
+                    <div className="text-sm font-bold text-gray-900 hover:text-orange-600">ChefCarla</div>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="bg-orange-100 text-orange-700 px-1 py-0.5 rounded text-xs font-bold">Pro Chef</span>
+                      <span className="font-bold text-gray-500">183 helps today</span>
+                    </div>
                   </div>
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 </div>
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -257,8 +283,14 @@ const ChatInterface = () => {
                   {suggestedQuestions.map((q, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setInputValue(q.text)}
-                      className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition text-left"
+                      onClick={() => {
+                        setInputValue(q.text);
+                        // Auto-send the question
+                        setTimeout(() => {
+                          handleSend();
+                        }, 100);
+                      }}
+                      className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition text-left cursor-pointer"
                     >
                       <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-blue-600">
                         {q.icon}
@@ -296,7 +328,7 @@ const ChatInterface = () => {
                       {message.expertResponses && (
                         <div className="mt-3 space-y-3">
                           {message.expertResponses.map((expert, idx) => (
-                            <div key={idx} className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 transition">
+                            <div key={idx} className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 transition cursor-pointer" onClick={() => window.location.href = `/chat/thread/${message.id}`}>
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex items-center gap-2">
                                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
@@ -304,44 +336,59 @@ const ChatInterface = () => {
                                   </div>
                                   <div>
                                     <div className="flex items-center gap-2">
-                                      <span className="font-semibold text-sm text-gray-900">{expert.expertName}</span>
-                                      <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-medium">
+                                      <span className="font-bold text-sm text-gray-900">{expert.expertName}</span>
+                                      <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">
                                         {expert.expertBadge}
                                       </span>
                                       {idx === 0 && (
-                                        <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium flex items-center gap-1">
+                                        <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
                                           <Star className="w-3 h-3" />
                                           TOP ANSWER
                                         </span>
                                       )}
                                     </div>
                                     <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
-                                      <span className="font-medium">{expert.successRate} success</span>
+                                      <span className="font-bold">{expert.successRate} success</span>
                                       <span>•</span>
-                                      <span>{expert.timesSolved} times solved</span>
+                                      <span className="font-bold">{expert.timesSolved} times solved</span>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                               
-                              <p className="text-sm text-gray-700 mb-3">{expert.response}</p>
+                              <p className="text-sm font-bold text-gray-700 mb-3">{expert.response}</p>
                               
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                   <button 
-                                    onClick={() => handleNod(message.id, idx)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleNod(message.id, idx);
+                                    }}
                                     className="flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 transition"
                                   >
                                     <ThumbsUp className={`w-4 h-4 ${expert.nods > 2000 ? 'fill-blue-600 text-blue-600' : ''}`} />
-                                    <span className="font-semibold">{expert.nods.toLocaleString()}</span>
+                                    <span className="font-bold">{expert.nods.toLocaleString()}</span>
                                     <span>nods</span>
                                   </button>
-                                  <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.location.href = `/chat/thread/${message.id}`;
+                                    }}
+                                    className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                                  >
                                     <MessageCircle className="w-4 h-4" />
-                                    <span>Ask {expert.expertName.split(/(?=[A-Z])/)[0]}</span>
+                                    <span className="font-bold">Ask {expert.expertName.split(/(?=[A-Z])/)[0]}</span>
                                   </button>
                                 </div>
-                                <button className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.location.href = `/experts/${expert.expertName.toLowerCase().replace(/([A-Z])/g, '-$1').replace(/^-/, '')}`;
+                                  }}
+                                  className="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1"
+                                >
                                   View Profile
                                   <ExternalLink className="w-3 h-3" />
                                 </button>
@@ -362,7 +409,7 @@ const ChatInterface = () => {
                   </div>
                   <div className="bg-gray-100 rounded-xl px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">Finding top expert solutions</span>
+                      <span className="text-sm font-bold text-gray-600">Finding top expert solutions</span>
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                         <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -386,21 +433,21 @@ const ChatInterface = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Describe your problem... (e.g., 'toilet keeps running' or 'bread too dense')"
-                className="flex-1 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-bold"
               />
               <button
                 onClick={handleSend}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-medium"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-bold"
               >
                 <Send className="w-4 h-4" />
                 Get Expert Help
               </button>
             </div>
             <div className="flex items-center justify-between mt-2">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs font-bold text-gray-500">
                 Dad AI presents the most-nodded community solutions from verified experts
               </span>
-              <span className="text-xs text-gray-500 flex items-center gap-1">
+              <span className="text-xs font-bold text-gray-500 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 Avg response: 3 seconds
               </span>
@@ -411,7 +458,7 @@ const ChatInterface = () => {
         {/* Right Sidebar */}
         <div className="w-80 flex flex-col gap-4">
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
               <Award className="w-5 h-5 text-blue-600" />
               Why Trust These Experts?
             </h3>
@@ -419,33 +466,33 @@ const ChatInterface = () => {
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-gray-900">Verified Credentials</span>
-                  <p className="text-xs text-gray-600 mt-0.5">Real plumbers, real chefs, real mechanics</p>
+                  <span className="font-bold text-gray-900">Verified Credentials</span>
+                  <p className="text-xs font-bold text-gray-600 mt-0.5">Real plumbers, real chefs, real mechanics</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-gray-900">Community Validated</span>
-                  <p className="text-xs text-gray-600 mt-0.5">Thousands of successful solutions</p>
+                  <span className="font-bold text-gray-900">Community Validated</span>
+                  <p className="text-xs font-bold text-gray-600 mt-0.5">Thousands of successful solutions</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-gray-900">Track Record Visible</span>
-                  <p className="text-xs text-gray-600 mt-0.5">See success rates and nod counts</p>
+                  <span className="font-bold text-gray-900">Track Record Visible</span>
+                  <p className="text-xs font-bold text-gray-600 mt-0.5">See success rates and nod counts</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4">
-            <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+            <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
               <Lightbulb className="w-4 h-4 text-yellow-600" />
               Get Better Answers
             </h4>
-            <ul className="space-y-1 text-xs text-gray-700">
+            <ul className="space-y-1 text-xs font-bold text-gray-700">
               <li>• Include your specific model/brand</li>
               <li>• Mention what you've already tried</li>
               <li>• Add photos if possible</li>
@@ -454,23 +501,23 @@ const ChatInterface = () => {
           </div>
 
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
-            <h4 className="font-semibold text-gray-900 mb-2 text-sm">Today's Stats</h4>
+            <h4 className="font-bold text-gray-900 mb-2 text-sm">Today's Stats</h4>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-gray-600">Problems Solved</span>
-                <span className="font-semibold text-gray-900">14,827</span>
+                <span className="font-bold text-gray-600">Problems Solved</span>
+                <span className="font-bold text-gray-900">14,827</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray-600">Experts Active</span>
-                <span className="font-semibold text-gray-900">892</span>
+                <span className="font-bold text-gray-600">Experts Active</span>
+                <span className="font-bold text-gray-900">892</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray-600">Avg Solution Time</span>
-                <span className="font-semibold text-gray-900">3.2 min</span>
+                <span className="font-bold text-gray-600">Avg Solution Time</span>
+                <span className="font-bold text-gray-900">3.2 min</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray-600">Success Rate</span>
-                <span className="font-semibold text-green-600">94.3%</span>
+                <span className="font-bold text-gray-600">Success Rate</span>
+                <span className="font-bold text-green-600">94.3%</span>
               </div>
             </div>
           </div>

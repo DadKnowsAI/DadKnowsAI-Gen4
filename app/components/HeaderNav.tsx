@@ -34,12 +34,18 @@ export default function HeaderNav() {
               >
                 DADKNOWS
               </Link>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
-                <span className="font-bold text-red-500">
-                  {expertsOnline} EXPERTS ONLINE
-                </span>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-green-500">●</span>
+              <span className="font-bold text-red-500">
+                {expertsOnline} EXPERTS ONLINE
+              </span>
+              <div className="flex items-center bg-green-500 rounded-lg px-3 py-1 ml-4">
+                <svg className="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
+                </svg>
+                <span className="font-bold text-white">8,302 nods given</span>
               </div>
+            </div>
             </div>
             <nav className="flex items-center gap-6">
               <Link 
