@@ -2,11 +2,10 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
-  ArrowLeft, Home, BookOpen, Users, Trophy, Clock, 
-  CheckCircle, ChevronRight, Brain, AlertCircle, Search,
-  Target, Shield, Sparkles, Award, ThumbsUp, PlayCircle,
-  MessageSquare, Lightbulb, Code, FileText, Video, 
+  ArrowLeft, Users, Trophy, Clock, 
+  CheckCircle, MessageSquare, Lightbulb, 
   ArrowRight, Lock, Star
 } from 'lucide-react';
 
@@ -33,12 +32,12 @@ interface LessonContent {
 const lessonDatabase: Record<string, LessonContent> = {
   'basics-0': {
     category: 'AI Basics',
-    title: "AI Isn't Magic - It's Pattern Matching",
+    title: "AI Isn&apos;t Magic - It&apos;s Pattern Matching",
     duration: "5 min read",
     difficulty: "Beginner",
     objectives: [
       "Understand how AI recognizes patterns",
-      "Learn why AI seems 'smart' but isn't conscious",
+      "Learn why AI seems &apos;smart&apos; but isn&apos;t conscious",
       "Grasp the cookbook analogy for AI learning"
     ],
     content: [
@@ -219,10 +218,10 @@ export default function LessonPage({ params }: { params: { id: string } }) {
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/education" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+              <Link href="/education" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
                 <ArrowLeft className="w-5 h-5" />
                 <span className="text-sm font-bold">Back to Lessons</span>
-              </a>
+              </Link>
               <div className="border-l border-gray-200 pl-4">
                 <span className="text-xs font-bold text-gray-500">{lesson.category}</span>
               </div>
@@ -264,7 +263,7 @@ export default function LessonPage({ params }: { params: { id: string } }) {
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
             <h1 className="text-2xl font-bold mb-3">{lesson.title}</h1>
             <div className="space-y-2">
-              <h3 className="text-sm font-bold text-blue-100">What you'll learn:</h3>
+              <h3 className="text-sm font-bold text-blue-100">What you&apos;ll learn:</h3>
               <ul className="space-y-1">
                 {lesson.objectives.map((objective, idx) => (
                   <li key={idx} className="flex items-start gap-2 text-sm font-bold text-blue-50">
@@ -362,7 +361,7 @@ export default function LessonPage({ params }: { params: { id: string } }) {
                         Score: {quizScore}/{lesson.quiz?.length || 0}
                       </p>
                       {completed ? (
-                        <p className="text-green-600 font-bold">Perfect! You've mastered this lesson!</p>
+                        <p className="text-green-600 font-bold">Perfect! You&apos;ve mastered this lesson!</p>
                       ) : (
                         <p className="text-gray-600 font-bold">Review the incorrect answers and try again!</p>
                       )}
@@ -430,12 +429,12 @@ export default function LessonPage({ params }: { params: { id: string } }) {
           <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
             <MessageSquare className="w-6 h-6 text-blue-600 mx-auto mb-2" />
             <p className="text-sm font-bold text-gray-900">Got questions?</p>
-            <a href="/chat" className="text-xs font-bold text-blue-600 hover:text-blue-700">Ask Dad AI →</a>
+            <Link href="/chat" className="text-xs font-bold text-blue-600 hover:text-blue-700">Ask Dad AI →</Link>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
             <Users className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <p className="text-sm font-bold text-gray-900">Join discussion</p>
-            <a href="/categories" className="text-xs font-bold text-green-600 hover:text-green-700">View communities →</a>
+            <Link href="/categories" className="text-xs font-bold text-green-600 hover:text-green-700">View communities →</Link>
           </div>
         </div>
       </div>

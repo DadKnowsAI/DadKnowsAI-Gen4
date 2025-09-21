@@ -1,15 +1,14 @@
 'use client'
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
+  BookOpen,
   ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Crown, Shield, Medal, Target, Calendar,
+  Circle, ArrowLeft, Crown, Shield, Medal, Target, Calendar,
   BarChart3, Mail, Phone, MapPin, Globe, Camera,
-  Share2, Send, Bot, User as UserIcon
+  Share2, Send, Bot, User as UserIcon, Award, Star
 } from 'lucide-react';
 
 const ExpertPage = ({ params }: { params: { id: string } }) => {
@@ -109,10 +108,10 @@ const ExpertPage = ({ params }: { params: { id: string } }) => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-4">
-              <a href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
                 DadKnows
-              </a>
+              </Link>
               
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -125,22 +124,22 @@ const ExpertPage = ({ params }: { params: { id: string } }) => {
             </div>
 
             <nav className="flex items-center gap-2">
-              <a href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Home className="w-4 h-4" />
                 Home
-              </a>
-              <a href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Users className="w-4 h-4" />
                 Communities
-              </a>
-              <a href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <BookOpen className="w-4 h-4" />
                 Learn AI
-              </a>
-              <a href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
+              </Link>
+              <Link href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Trophy className="w-4 h-4" />
                 Rankings
-              </a>
+              </Link>
               
               <div className="ml-4 flex items-center gap-3 border-l border-gray-200 pl-4">
                 <button className="relative p-2 hover:bg-gray-100 rounded-lg">
@@ -151,9 +150,9 @@ const ExpertPage = ({ params }: { params: { id: string } }) => {
                   <MessageSquare className="w-5 h-5 text-gray-600" />
                   <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">3</span>
                 </button>
-                <a href="/profile" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                <Link href="/profile" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                   JD
-                </a>
+                </Link>
               </div>
             </nav>
           </div>
@@ -163,10 +162,10 @@ const ExpertPage = ({ params }: { params: { id: string } }) => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Back Button */}
         <div className="mb-6">
-          <a href="/leaderboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+          <Link href="/leaderboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
             <ArrowLeft className="w-4 h-4" />
             Back to Leaderboard
-          </a>
+          </Link>
         </div>
 
         {/* Expert Header */}
@@ -458,20 +457,20 @@ const ExpertPage = ({ params }: { params: { id: string } }) => {
             <div className="bg-white rounded-xl border border-gray-200 p-4">
               <h3 className="font-semibold text-gray-900 mb-3">Similar Experts</h3>
               <div className="space-y-2">
-                <a href="/experts/plumber-pete" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
+                <Link href="/experts/plumber-pete" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
                   <img src="/api/placeholder/32/32" alt="Expert" className="w-8 h-8 rounded-full" />
                   <div className="flex-1">
                     <div className="text-sm font-medium text-gray-900">PlumberPete</div>
                     <div className="text-xs text-gray-500">156 nods</div>
                   </div>
-                </a>
-                <a href="/experts/handy-mike" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
+                </Link>
+                <Link href="/experts/handy-mike" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
                   <img src="/api/placeholder/32/32" alt="Expert" className="w-8 h-8 rounded-full" />
                   <div className="flex-1">
                     <div className="text-sm font-medium text-gray-900">HandyMike</div>
                     <div className="text-xs text-gray-500">89 nods</div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

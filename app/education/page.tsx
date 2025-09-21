@@ -49,7 +49,7 @@ const EducationHub = () => {
         duration: "8 min interactive",
         difficulty: "Intermediate",
         icon: <Target className="w-5 h-5" />,
-        description: "Be specific! &apos;Fix my car&apos; vs &apos;My 2015 Honda Civic won&apos;t start, battery is new&apos;",
+        description: "Be specific! &quot;Fix my car&quot; vs &quot;My 2015 Honda Civic won&apos;t start, battery is new&quot;",
         locked: false
       },
       {
@@ -83,7 +83,7 @@ const EducationHub = () => {
         duration: "5 min read",
         difficulty: "Important",
         icon: <Award className="w-5 h-5" />,
-        description: "How we make sure &apos;MikeThePlumber&apos; is actually a plumber",
+        description: "How we make sure &quot;MikeThePlumber&quot; is actually a plumber",
         locked: false
       },
       {
@@ -299,7 +299,7 @@ const EducationHub = () => {
                 {realExamples.map((example, idx) => (
                   <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden">
                     <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-                      <span className="font-bold text-sm text-gray-900">Problem: "{example.problem}"</span>
+                      <span className="font-bold text-sm text-gray-900">Problem: &quot;{example.problem}&quot;</span>
                     </div>
                     <div className="p-4 grid grid-cols-2 gap-4">
                       <div className="space-y-2">
@@ -308,7 +308,7 @@ const EducationHub = () => {
                           Generic AI Response
                         </div>
                         <div className="bg-gray-50 p-3 rounded text-sm font-bold text-gray-600 italic">
-                          "{example.aiResponse}"
+                          &quot;{example.aiResponse}&quot;
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -317,7 +317,7 @@ const EducationHub = () => {
                           DadKnows Response
                         </div>
                         <div className="bg-blue-50 p-3 rounded text-sm font-bold text-gray-700">
-                          "{example.dadknowsResponse}"
+                          &quot;{example.dadknowsResponse}&quot;
                         </div>
                         <div className="bg-green-50 p-2 rounded text-sm font-bold text-green-700">
                           ✓ {example.outcome}
@@ -433,7 +433,7 @@ const EducationHub = () => {
                 Pro Tip
               </h4>
               <p className="text-sm font-bold text-gray-700">
-                The more specific your question, the better the answer. Instead of "help with cooking," try "my cookies are always flat - using recipe from Betty Crocker cookbook."
+                The more specific your question, the better the answer. Instead of &quot;help with cooking,&quot; try &quot;my cookies are always flat - using recipe from Betty Crocker cookbook.&quot;
               </p>
             </div>
 
