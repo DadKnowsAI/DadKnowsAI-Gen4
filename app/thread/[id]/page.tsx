@@ -1,400 +1,530 @@
 'use client'
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { 
-  ArrowLeft, ThumbsUp, MessageCircle, Bookmark, Award, 
-  MoreHorizontal, Clock, CheckCircle, Reply, Send,
-  TrendingUp, Users, ChevronUp, ChevronDown, Star, User
-} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import HeaderNav from '../../components/HeaderNav'
+import '../../thread.css'
 
-const ThreadPage = () => {
-  const [comment, setComment] = useState('');
-  const [replyTo, setReplyTo] = useState<string | null>(null);
-  const [votes, setVotes] = useState<Record<string, number>>({
-    main: 127,
-    comment1: 45,
-    comment2: 23,
-    comment3: 89,
-    comment4: 12
-  });
-  const [userVotes, setUserVotes] = useState<Record<string, string | null>>({});
+interface Message {
+  id: string
+  type: 'user' | 'ai' | 'expert'
+  username: string
+  text: string
+  badge?: string
+  confidence?: number
+  reactions: Record<string, number>
+  timestamp: Date
+}
 
-  const handleVote = (id: string, type: string) => {
-    const currentVote = userVotes[id];
-    let voteChange = 0;
-    
-    if (currentVote === type) {
-      // Remove vote
-      setUserVotes(prev => ({ ...prev, [id]: null }));
-      voteChange = type === 'up' ? -1 : 1;
-    } else if (currentVote === null || currentVote === undefined) {
-      // Add vote
-      setUserVotes(prev => ({ ...prev, [id]: type }));
-      voteChange = type === 'up' ? 1 : -1;
-    } else {
-      // Change vote
-      setUserVotes(prev => ({ ...prev, [id]: type }));
-      voteChange = type === 'up' ? 2 : -2;
-    }
-    
-    setVotes(prev => ({ ...prev, [id]: prev[id] + voteChange }));
-  };
+interface LiveUser {
+  name: string
+  status: string
+  avatar: string
+}
 
-  const [comments, setComments] = useState([
+export default function ThreadPage() {
+  const params = useParams()
+  const router = useRouter()
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputText, setInputText] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const [liveUsers, setLiveUsers] = useState<LiveUser[]>([])
+  const [userPoints, setUserPoints] = useState(0)
+  const [showAchievement, setShowAchievement] = useState(false)
+  const [achievementText, setAchievementText] = useState('')
+
+  // Initial messages for the thread
+  const initialMessages: Message[] = [
     {
-      id: 'comment1',
-      author: 'HandymanHank',
-      badge: 'DIY Expert',
-      nods: 1234,
-      time: '1 hour ago',
-      text: 'Great advice! I&apos;d also add that while you&apos;re at it, check the chain length. If it&apos;s too short, the flapper won&apos;t seal properly. You can adjust it or get a new one for another couple bucks.',
-      replies: [
-        {
-          id: 'reply1',
-          author: 'SarahM',
-          badge: 'OP',
-          time: '45 minutes ago',
-          text: 'Thanks for the extra tip! I&apos;ll check that too.',
-          isOP: true
-        }
-      ]
+      id: '1',
+      type: 'user',
+      username: 'HungrySteve',
+      text: 'Steak is GREY not brown! WTF! 😤',
+      reactions: { '👍': 12, '😯': 8 },
+      timestamp: new Date()
     },
     {
-      id: 'comment2',
-      author: 'BudgetBetty',
-      badge: null,
-      nods: 432,
-      time: '2 hours ago',
-      text: 'For anyone on a tight budget - you can sometimes get a temporary fix by cleaning the existing flapper with vinegar. Mineral buildup can prevent a good seal. Not permanent but buys you time!',
-      replies: []
+      id: '2',
+      type: 'ai',
+      username: 'ChefAI',
+      text: 'Pan not hot enough! SMOKING hot first!',
+      confidence: 87,
+      reactions: { '👍': 34, '🙏': 15 },
+      timestamp: new Date()
     },
     {
-      id: 'comment3',
-      author: 'PlumberPete',
-      badge: 'Verified Pro',
-      nods: 3421,
-      time: '30 minutes ago',
-      text: 'Mike&apos;s spot on. Just want to add - if this is happening to multiple toilets in your house, you might have high water pressure. Worth checking if the problem comes back!',
-      replies: [
-        {
-          id: 'reply2',
-          author: 'MikeThePlumber',
-          badge: 'Super Dad',
-          time: '28 minutes ago',
-          text: 'Excellent point Pete! High water pressure can definitely cause premature wear on flappers. 👍'
-        }
-      ]
+      id: '3',
+      type: 'user',
+      username: 'HungrySteve',
+      text: 'How hot exactly??',
+      reactions: { '😟': 5 },
+      timestamp: new Date()
+    },
+    {
+      id: '4',
+      type: 'ai',
+      username: 'ChefAI',
+      text: 'Water drop should dance! 💃 Then oil!',
+      confidence: 92,
+      reactions: { '💯': 18, '👍': 27 },
+      timestamp: new Date()
+    },
+    {
+      id: '5',
+      type: 'expert',
+      username: 'GrillMaster',
+      text: 'Cast iron = best sear! 🔥',
+      badge: 'EXPERT',
+      reactions: { '🔥': 42, '👍': 67, '🏆': 23 },
+      timestamp: new Date()
+    },
+    {
+      id: '6',
+      type: 'user',
+      username: 'HungrySteve',
+      text: 'Holy shit perfect crust!! 🥩',
+      reactions: { '🔥': 15, '👍': 8 },
+      timestamp: new Date()
     }
-  ]);
+  ]
 
-  const handleComment = () => {
-    if (!comment.trim()) return;
+  const initialLiveUsers: LiveUser[] = [
+    { name: 'MechanicDave', status: 'Expert', avatar: 'MD' },
+    { name: 'CarGuru99', status: 'Helper', avatar: 'CG' },
+    { name: 'JohnDad42', status: 'OP', avatar: 'JD' },
+    { name: 'AutoAndy', status: 'Viewing', avatar: 'AA' },
+    { name: 'FixItFred', status: 'Helper', avatar: 'FF' }
+  ]
+
+  useEffect(() => {
+    // Initialize chat with delayed message loading for animation
+    initialMessages.forEach((msg, index) => {
+      setTimeout(() => {
+        setMessages(prev => [...prev, msg])
+      }, index * 500)
+    })
+
+    setLiveUsers(initialLiveUsers)
+
+    // Start random events
+    const reactionInterval = setInterval(createFloatingReaction, 3000)
+    const userJoinInterval = setInterval(simulateUserJoin, 10000)
+    const trendingInterval = setInterval(showTrendingNotification, 15000)
+
+    return () => {
+      clearInterval(reactionInterval)
+      clearInterval(userJoinInterval)
+      clearInterval(trendingInterval)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Scroll to bottom when new messages arrive
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }, [messages])
+
+  const sendMessage = () => {
+    if (!inputText.trim()) return
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      username: 'You',
+      text: inputText,
+      reactions: {},
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, newMessage])
+    setInputText('')
     
-    const newComment = {
-      id: `comment${comments.length + 2}`,
-      author: 'You',
-      badge: null,
-      nods: 0,
-      time: 'just now',
-      text: comment,
-      replies: []
-    };
+    // Show typing indicator
+    setIsTyping(true)
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiResponses = [
+        { text: "Great question! Let me help you with that.", confidence: 85 },
+        { text: "Based on what you're describing, here's what I recommend:", confidence: 92 },
+        { text: "I understand your concern. Here's the solution:", confidence: 88 },
+        { text: "That's a common issue! Here's how to fix it:", confidence: 94 }
+      ]
+      
+      const response = aiResponses[Math.floor(Math.random() * aiResponses.length)]
+      
+      const aiMessage: Message = {
+        id: Date.now().toString(),
+        type: 'ai',
+        username: 'Dad AI',
+        text: response.text,
+        confidence: response.confidence,
+        reactions: { '👍': 0 },
+        timestamp: new Date()
+      }
+
+      setIsTyping(false)
+      setMessages(prev => [...prev, aiMessage])
+      awardPoints(10)
+
+      // Random expert chime in
+      if (Math.random() > 0.6) {
+        setTimeout(addExpertMessage, 2000)
+      }
+    }, 1500 + Math.random() * 1500)
+  }
+
+  const quickReply = (text: string) => {
+    setInputText(text)
+    setTimeout(sendMessage, 100)
+  }
+
+  const addReaction = (messageId: string, emoji: string) => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === messageId) {
+        const newReactions = { ...msg.reactions }
+        newReactions[emoji] = (newReactions[emoji] || 0) + 1
+        return { ...msg, reactions: newReactions }
+      }
+      return msg
+    }))
     
-    setComments([...comments, newComment]);
-    setComment('');
-    setVotes(prev => ({ ...prev, [newComment.id]: 0 }));
-  };
+    createFloatingReaction()
+    awardPoints(5)
+  }
+
+  const addExpertMessage = () => {
+    const expertMessages = [
+      "Can confirm this fix works! Just did it yesterday.",
+      "Pro tip: Check both CV joints while you're at it!",
+      "If you hear grinding too, don't wait - that's serious!",
+      "I've seen this exact issue dozens of times. Easy fix!",
+      "Great explanation by Dad AI! Spot on diagnosis."
+    ]
+    
+    const experts = ['MechanicDave', 'CarGuru99', 'AutoExpert', 'FixItFred']
+    
+    const expertMessage: Message = {
+      id: Date.now().toString(),
+      type: 'expert',
+      username: experts[Math.floor(Math.random() * experts.length)],
+      text: expertMessages[Math.floor(Math.random() * expertMessages.length)],
+      badge: 'EXPERT',
+      reactions: { '👍': Math.floor(Math.random() * 20) },
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, expertMessage])
+  }
+
+  const createFloatingReaction = () => {
+    const reactions = ['❤️', '👍', '🔥', '💯', '🙌', '✨', '💪', '🎯']
+    const container = document.getElementById('floatingReactions')
+    if (!container) return
+
+    const emoji = document.createElement('div')
+    emoji.className = 'floating-emoji'
+    emoji.textContent = reactions[Math.floor(Math.random() * reactions.length)]
+    emoji.style.left = Math.random() * 80 + 'px'
+    container.appendChild(emoji)
+    setTimeout(() => emoji.remove(), 3000)
+  }
+
+  const awardPoints = (points: number) => {
+    const newPoints = userPoints + points
+    setUserPoints(newPoints)
+    
+    if (newPoints >= 50 && userPoints < 50) {
+      showAchievementToast('🎯 Active Participant! +50 points')
+    } else if (newPoints >= 100 && userPoints < 100) {
+      showAchievementToast('🏆 Problem Solver! +100 points')
+    } else if (newPoints >= 200 && userPoints < 200) {
+      showAchievementToast('⭐ Community Hero! +200 points')
+    }
+  }
+
+  const showAchievementToast = (text: string) => {
+    setAchievementText(text)
+    setShowAchievement(true)
+    setTimeout(() => setShowAchievement(false), 3000)
+  }
+
+  const simulateUserJoin = () => {
+    if (Math.random() > 0.8) {
+      const newUser = {
+        name: `User${Math.floor(Math.random() * 999)}`,
+        status: 'Just joined',
+        avatar: 'U' + Math.floor(Math.random() * 9)
+      }
+      
+      setLiveUsers(prev => {
+        const updated = [...prev, newUser]
+        if (updated.length > 8) updated.shift()
+        return updated
+      })
+      
+      showAchievementToast(`👤 ${newUser.name} joined the chat!`)
+    }
+  }
+
+  const showTrendingNotification = () => {
+    if (Math.random() > 0.85) {
+      const notifications = [
+        "This thread is trending! 🔥",
+        "47 people found this helpful",
+        "Similar issue solved 2 hours ago",
+        "Expert verified solution ✅"
+      ]
+      showAchievementToast(notifications[Math.floor(Math.random() * notifications.length)])
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex items-center h-14">
-            <button 
-              onClick={() => window.location.href = '/'}
-              className="p-2 hover:bg-gray-100 rounded-lg transition mr-4"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">Plumbing</span>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">SOLVED</span>
-                <span className="text-xs text-gray-500">• Posted 2 hours ago by <Link href="/profile/sarahm" className="font-bold text-blue-600 hover:text-blue-800 hover:underline">SarahM</Link></span>
-              </div>
-            </div>
+    <div className="thread-wrapper">
+      {/* Main Navigation Header */}
+      <HeaderNav />
+      
+      {/* Stats Header */}
+      <div className="stats-header">
+        <div className="stats-container">
+          <div className="stat-item">
+            <div className="stat-dot green"></div>
+            <span>247 experts online</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-emoji">🔥</span>
+            <span>1,847 solved today</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-emoji">👍</span>
+            <span>8,365 nods given</span>
           </div>
         </div>
-      </header>
-
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        {/* Original Post */}
-        <div className="bg-white rounded-xl border border-gray-200 mb-6 hover:border-blue-300 hover:shadow-md transition cursor-pointer" onClick={() => window.location.href = '/thread/1'}>
-          <div className="p-6">
-            {/* Post Header */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Link href="/profile/sarahm" className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold hover:opacity-80 transition">
-                  <User className="w-6 h-6" />
-                </Link>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Link href="/profile/sarahm" className="font-bold text-gray-900 hover:text-blue-600 hover:underline">SarahM</Link>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">OP</span>
-                    <span className="text-xs text-gray-500">• 2 hours ago</span>
-                  </div>
-                  <div className="text-sm font-bold text-gray-600">First time homeowner</div>
-                </div>
-              </div>
-              <button className="text-gray-400 hover:text-gray-600">
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Post Title */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Help! Water won&apos;t stop running in toilet!
-            </h1>
-
-            {/* Post Body */}
-            <div className="text-gray-700 mb-4 space-y-3">
-              <p className="font-bold text-lg">
-                I just bought my first house and the upstairs toilet won&apos;t stop running. The water keeps going and going. 
-                I tried jiggling the handle but that only works for a few seconds.
-              </p>
-              <p className="font-bold text-lg">
-                It&apos;s driving me crazy and probably wasting tons of water. Is this something I can fix myself or do I need 
-                to call a plumber? I&apos;m pretty handy but have never dealt with toilet repairs before.
-              </p>
-              <p className="font-bold text-lg">
-                Any help would be appreciated! Thanks in advance, dads!
-              </p>
-            </div>
-
-            {/* Best Answer */}
-            <div className="bg-green-50 rounded-lg p-4 mb-4 border-2 border-green-200">
-              <div className="flex items-start gap-3">
-                <div className="pt-1">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Award className="w-4 h-4 text-green-600" />
-                    <span className="font-bold text-sm text-green-800">Best Answer</span>
-                    <span className="text-xs text-gray-600">• Marked by OP</span>
-                  </div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                      <User className="w-4 h-4" />
-                    </div>
-                    <Link href="/profile/mike-the-plumber" className="font-bold text-gray-900 hover:text-blue-600 hover:underline">MikeThePlumber</Link>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Super Dad</span>
-                    <span className="text-xs text-gray-500">• 2.8k nods</span>
-                  </div>
-                  <p className="text-gray-700 font-bold text-lg">
-                    Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, 
-                    then replace the rubber flapper. It&apos;s a $5 fix at any hardware store - takes 10 
-                    minutes max! Here&apos;s what you do:
-                  </p>
-                  <ol className="mt-2 ml-4 space-y-1 text-sm text-gray-700 font-bold">
-                    <li>1. Turn off the water valve (usually on the wall behind the toilet)</li>
-                    <li>2. Flush the toilet to empty the tank</li>
-                    <li>3. Unhook the old flapper from the flush arm</li>
-                    <li>4. Snap the new flapper in place</li>
-                    <li>5. Turn water back on and test</li>
-                  </ol>
-                  <p className="text-sm text-gray-600 mt-2 font-bold">
-                    You got this! Let me know if you need any clarification.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Post Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <button 
-                    onClick={() => handleVote('main', 'up')}
-                    className={`p-1 rounded hover:bg-gray-100 ${userVotes.main === 'up' ? 'text-blue-600' : 'text-gray-500'}`}
-                  >
-                    <ChevronUp className="w-5 h-5" />
-                  </button>
-                  <span className={`font-bold text-sm ${userVotes.main ? 'text-blue-600' : 'text-gray-700'}`}>
-                    {votes.main}
-                  </span>
-                  <button 
-                    onClick={() => handleVote('main', 'down')}
-                    className={`p-1 rounded hover:bg-gray-100 ${userVotes.main === 'down' ? 'text-red-600' : 'text-gray-500'}`}
-                  >
-                    <ChevronDown className="w-5 h-5" />
-                  </button>
-                </div>
-                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{comments.length + comments.reduce((acc, c) => acc + c.replies.length, 0)} comments</span>
-                </button>
-                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-600">
-                  <Bookmark className="w-4 h-4" />
-                  <span>Save</span>
-                </button>
-              </div>
-              <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
-                <Reply className="w-4 h-4" />
-                <span>Share</span>
-              </button>
-            </div>
+        <div className="user-profile">
+          <div className="user-avatar">HS</div>
+          <div className="user-info">
+            <div className="username">HungrySteve</div>
+            <div className="user-status">Cooking • Just now</div>
           </div>
         </div>
+      </div>
 
-        {/* Add Comment */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-          <div className="flex gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-              <User className="w-5 h-5" />
-            </div>
-            <div className="flex-1">
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Add your advice or experience..."
-                className="w-full p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={3}
-              />
-              <div className="flex justify-between items-center mt-2">
-                <div className="text-xs text-gray-500">
-                  Be helpful and respectful
-                </div>
-                <button
-                  onClick={handleComment}
-                  disabled={!comment.trim()}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition flex items-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Comment
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Live Users Panel */}
+      <div className="live-users">
+        <div className="live-users-header">
+          <span>🟢 Active Now</span>
+          <span className="user-count">{liveUsers.length}</span>
         </div>
-
-        {/* Comments Section */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-gray-900">All Comments ({comments.length})</h2>
-            <select className="text-sm border border-gray-200 rounded-lg px-3 py-1">
-              <option>Most Helpful</option>
-              <option>Newest</option>
-              <option>Oldest</option>
-            </select>
-          </div>
-
-          {comments.map((comment) => (
-            <div key={comment.id} className="bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition cursor-pointer" onClick={() => window.location.href = '/thread/1'}>
-              <div className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-bold text-gray-900 text-lg">{comment.author}</span>
-                      {comment.badge && (
-                        <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">
-                          {comment.badge}
-                        </span>
-                      )}
-                      {comment.nods && (
-                        <span className="text-xs text-gray-500">• {comment.nods} nods</span>
-                      )}
-                      <span className="text-xs text-gray-500">• {comment.time}</span>
-                    </div>
-                    <p className="text-gray-700 mb-3 font-bold text-lg">{comment.text}</p>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <button 
-                          onClick={() => handleVote(comment.id, 'up')}
-                          className={`p-1 rounded hover:bg-gray-100 ${userVotes[comment.id] === 'up' ? 'text-blue-600' : 'text-gray-500'}`}
-                        >
-                          <ChevronUp className="w-4 h-4" />
-                        </button>
-                        <span className={`text-sm ${userVotes[comment.id] ? 'text-blue-600' : 'text-gray-600'}`}>
-                          {votes[comment.id]}
-                        </span>
-                        <button 
-                          onClick={() => handleVote(comment.id, 'down')}
-                          className={`p-1 rounded hover:bg-gray-100 ${userVotes[comment.id] === 'down' ? 'text-red-600' : 'text-gray-500'}`}
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <button 
-                        onClick={() => setReplyTo(replyTo === comment.id ? null : comment.id)}
-                        className="text-sm text-gray-500 hover:text-gray-700"
-                      >
-                        Reply
-                      </button>
-                    </div>
-                    
-                    {/* Replies */}
-                    {comment.replies.length > 0 && (
-                      <div className="mt-4 pl-4 border-l-2 border-gray-200 space-y-3">
-                        {comment.replies.map((reply) => (
-                          <div key={reply.id} className="flex items-start gap-2">
-                            <div className={`w-8 h-8 ${(reply as { isOP?: boolean }).isOP ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gradient-to-br from-orange-500 to-red-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
-                              <User className="w-4 h-4" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-bold text-sm text-gray-900">{reply.author === 'SarahM' ? <Link href="/profile/sarahm" className="hover:text-blue-600 hover:underline">SarahM</Link> : reply.author}</span>
-                                {reply.badge && (
-                                  <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">
-                                    {reply.badge}
-                                  </span>
-                                )}
-                                <span className="text-xs text-gray-500">• {reply.time}</span>
-                              </div>
-                              <p className="text-sm text-gray-700 font-bold">{reply.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Reply Input */}
-                    {replyTo === comment.id && (
-                      <div className="mt-3 pl-4">
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            placeholder="Write a reply..."
-                            className="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onKeyPress={(e) => {
-                              if (e.key === 'Enter') {
-                                setReplyTo(null);
-                              }
-                            }}
-                          />
-                          <button 
-                            onClick={() => setReplyTo(null)}
-                            className="text-sm text-gray-500 hover:text-gray-700"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+        <div className="live-users-list">
+          {liveUsers.map((user, index) => (
+            <div key={index} className="live-user-item">
+              <div className="user-status"></div>
+              <div className="avatar user-avatar">{user.avatar}</div>
+              <div>
+                <div className="user-name">{user.name}</div>
+                <div className="user-role">{user.status}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
-  );
-};
 
-export default ThreadPage;
+      {/* Floating Reactions */}
+      <div className="floating-reactions" id="floatingReactions"></div>
+
+      {/* Achievement Toast */}
+      <div className={`achievement-toast ${showAchievement ? 'show' : ''}`}>
+        {achievementText}
+      </div>
+
+      {/* Chat Container */}
+      <div className="chat-container" ref={chatContainerRef}>
+        {messages.map((message) => (
+          <div key={message.id} className={`message ${message.type}`}>
+            <div className="message-content">
+              <div className="message-header">
+                <div className={`avatar ${message.type}-avatar`}>
+                  {message.type === 'ai' ? '🍔' : 
+                   message.type === 'expert' ? 'Gr' : 
+                   message.username.substring(0, 2).toUpperCase()}
+                </div>
+                <span className="username">{message.username}</span>
+                {message.badge && (
+                  <span className={`badge ${message.badge.toLowerCase()}-badge`}>
+                    {message.badge}
+                  </span>
+                )}
+              </div>
+              <div className="message-bubble">
+                {message.id === '2' ? (
+                  <span>
+                    Pan not hot enough! <span className="highlight-text">SMOKING hot</span> first!
+                  </span>
+                ) : (
+                  message.text
+                )}
+                {message.confidence && (
+                  <div className="confidence-meter">
+                    <span className="confidence-label">Confidence:</span>
+                    <div className="confidence-bar">
+                      <div 
+                        className="confidence-fill" 
+                        style={{width: `${message.confidence}%`}}
+                      ></div>
+                    </div>
+                    <span className="confidence-value">{message.confidence}%</span>
+                  </div>
+                )}
+              </div>
+              {Object.keys(message.reactions).length > 0 && (
+                <div className="message-reactions">
+                  {Object.entries(message.reactions).map(([emoji, count]) => (
+                    <div 
+                      key={emoji}
+                      className="reaction-btn"
+                      onClick={() => addReaction(message.id, emoji)}
+                    >
+                      {emoji} {count}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+        
+        {/* Success notification */}
+        <div className="success-notification">
+          <div className="success-icon">✔</div>
+          <span>3.4k perfect steaks today!</span>
+        </div>
+        
+        {isTyping && (
+          <div className="typing-indicator show">
+            <div className="avatar ai-avatar">🍔</div>
+            <div className="typing-dots">
+              <div className="typing-dot"></div>
+              <div className="typing-dot"></div>
+              <div className="typing-dot"></div>
+            </div>
+            <span className="typing-text">ChefAI is thinking...</span>
+          </div>
+        )}
+
+        {/* Input Area - moved inside chat container */}
+        <div className="input-area-inline">
+          <div className="input-container">
+            <input 
+              type="text" 
+              className="message-input"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              placeholder="Type your message... (or use quick replies below)"
+            />
+            <button className="send-btn" onClick={sendMessage}>➤</button>
+          </div>
+          <div className="quick-replies">
+            <div className="quick-reply" onClick={() => quickReply('That makes sense!')}>
+              That makes sense! 👍
+            </div>
+            <div className="quick-reply" onClick={() => quickReply('Can you explain more?')}>
+              Can you explain more? 🤔
+            </div>
+            <div className="quick-reply" onClick={() => quickReply('How much will this cost?')}>
+              How much will this cost? 💰
+            </div>
+            <div className="quick-reply" onClick={() => quickReply('Is this urgent?')}>
+              Is this urgent? ⚠️
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Comments Section */}
+      <div className="comments-section">
+        <div className="comments-header">
+          <h3>Comments</h3>
+          <span className="comment-count">47 comments</span>
+        </div>
+        
+        <div className="comments-list">
+          <div className="comment-item">
+            <div className="comment-avatar">M</div>
+            <div className="comment-content">
+              <div className="comment-header">
+                <span className="comment-author">MikeThePlumber</span>
+                <span className="comment-time">2h</span>
+              </div>
+              <div className="comment-text">This is exactly what I needed! Thanks ChefAI! 🙏</div>
+              <div className="comment-actions">
+                <button className="comment-action">👍 12</button>
+                <button className="comment-action">Reply</button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="comment-item">
+            <div className="comment-avatar">S</div>
+            <div className="comment-content">
+              <div className="comment-header">
+                <span className="comment-author">SarahM</span>
+                <span className="comment-time">1h</span>
+              </div>
+              <div className="comment-text">I've been doing this wrong for years! Game changer 🔥</div>
+              <div className="comment-actions">
+                <button className="comment-action">👍 8</button>
+                <button className="comment-action">Reply</button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="comment-item">
+            <div className="comment-avatar">T</div>
+            <div className="comment-content">
+              <div className="comment-header">
+                <span className="comment-author">TechDad99</span>
+                <span className="comment-time">45m</span>
+              </div>
+              <div className="comment-text">Pro tip: Use cast iron for the best sear!</div>
+              <div className="comment-actions">
+                <button className="comment-action">👍 15</button>
+                <button className="comment-action">Reply</button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="comment-item">
+            <div className="comment-avatar">N</div>
+            <div className="comment-content">
+              <div className="comment-header">
+                <span className="comment-author">NewbieBob</span>
+                <span className="comment-time">30m</span>
+              </div>
+              <div className="comment-text">Trying this tonight! Will report back 🍳</div>
+              <div className="comment-actions">
+                <button className="comment-action">👍 5</button>
+                <button className="comment-action">Reply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="add-comment">
+          <div className="comment-input-container">
+            <div className="comment-avatar">Y</div>
+            <input 
+              type="text" 
+              className="comment-input"
+              placeholder="Add a comment..."
+            />
+            <button className="comment-post-btn">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

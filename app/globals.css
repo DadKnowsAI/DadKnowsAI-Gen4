@@ -1,11 +1,62 @@
 @import "tailwindcss";
 
-/* Light Theme Base Styles */
+/* DADK Cohesive Color System - Mid-darkness theme with purple accents */
+:root {
+  /* Background Colors - Mid-darkness theme */
+  --bg-primary: #1C1E26;
+  --bg-secondary: #252830;
+  --bg-tertiary: #2D3039;
+  --surface: #1F2229;
+  
+  /* Text Colors */
+  --text-primary: #E4E4E7;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  /* Accent Colors */
+  --accent-primary: #8B5CF6;
+  --accent-purple-light: #A78BFA;
+  --accent-success: #10B981;
+  --accent-danger: #EF4444;
+  --accent-warning: #F59E0B;
+  
+  /* Chat Purple Colors */
+  --chat-purple: #7C3AED;
+  --chat-purple-bg: rgba(124, 58, 237, 0.15);
+  
+  /* Border Colors */
+  --border: #374151;
+  --border-hover: #4B5563;
+  
+  /* Legacy compatibility - map old variables to new system */
+  --primary-purple: var(--accent-primary);
+  --primary-purple-light: var(--accent-purple-light);
+  --primary-purple-dark: var(--chat-purple);
+  --primary-purple-darker: #6D28D9;
+  --primary-blue: #3B82F6;
+  --primary-blue-dark: #2563EB;
+  --primary-blue-light: #60A5FA;
+  --accent-green: var(--accent-success);
+  --accent-orange: var(--accent-warning);
+  --accent-gold: #FCD34D;
+  --accent-red: var(--accent-danger);
+  --accent-pink: #EC4899;
+  --bg-card: var(--bg-secondary);
+  --bg-card-hover: var(--bg-tertiary);
+  --text-dark: var(--text-primary);
+  --bg-light: var(--bg-secondary);
+  --border-color: var(--border);
+  --success: var(--accent-success);
+  --warning: var(--accent-warning);
+  --danger: var(--accent-danger);
+}
+
 body {
-  background: #f9fafb; /* gray-50 */
-  color: #111827; /* gray-900 */
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   line-height: 1.6;
+  min-height: 100vh;
 }
 
 /* Vintage OG Social Media Animations */
@@ -93,19 +144,20 @@ body {
 .animate-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
 .animate-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-/* EARLY 2000s COMPONENTS - Reddit-inspired Colors */
+/* EARLY 2000s COMPONENTS - Cohesive Color Theme */
 .vintage-post {
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   border: 2px solid var(--border);
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid var(--accent-primary);
   margin-bottom: 8px;
   padding: 12px;
   font-family: Arial, sans-serif;
+  backdrop-filter: blur(10px);
 }
 
 .vintage-post:hover {
-  border-left-color: var(--accent);
-  background: var(--bg-card-hover);
+  border-left-color: var(--accent-warning);
+  background: var(--bg-tertiary);
 }
 
 .vintage-vote {
@@ -118,14 +170,14 @@ body {
 
 /* FORCE VOTING COLORS - HIGHEST SPECIFICITY */
 div.vintage-vote div.vintage-upvote {
-  color: var(--accent) !important;
+  color: var(--accent-success) !important;
   font-size: 18px !important;
   cursor: pointer !important;
   font-weight: bold !important;
 }
 
 div.vintage-vote div.vintage-downvote {
-  color: var(--primary) !important;
+  color: var(--accent-danger) !important;
   font-size: 18px !important;
   cursor: pointer !important;
   font-weight: bold !important;
@@ -140,7 +192,7 @@ div.vintage-vote div.vintage-score {
 
 /* UNIFORM CATEGORY BOXES */
 .category-box {
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   padding: 8px 12px;
   margin: 2px;
@@ -149,27 +201,28 @@ div.vintage-vote div.vintage-score {
   text-decoration: none;
   display: inline-block;
   border: 2px solid var(--border);
+  backdrop-filter: blur(10px);
 }
 
 .category-box:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
   color: white;
 }
 
 .category-box.red { 
-  background: var(--bg-card); 
-  border-color: var(--accent);
+  background: var(--bg-secondary); 
+  border-color: var(--accent-danger);
   color: var(--text-primary);
 }
 .category-box.blue { 
-  background: var(--bg-card); 
-  border-color: var(--primary);
+  background: var(--bg-secondary); 
+  border-color: var(--primary-blue);
   color: var(--text-primary);
 }
 
 .vintage-header {
-  background: var(--primary);
+  background: var(--accent-primary);
   color: white;
   padding: 8px;
   font-weight: bold;
@@ -178,12 +231,13 @@ div.vintage-vote div.vintage-score {
 
 /* EARLY 2000s CHAT BUBBLES */
 .vintage-chat-bubble {
-  background: var(--bg-card);
+  background: var(--chat-purple-bg);
   border: 2px solid var(--border);
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 8px;
   position: relative;
+  backdrop-filter: blur(10px);
 }
 
 .vintage-chat-bubble::before {
@@ -195,7 +249,7 @@ div.vintage-vote div.vintage-score {
   height: 0;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 8px solid var(--bg-card);
+  border-right: 8px solid var(--chat-purple-bg);
 }
 
 .vintage-status {
@@ -206,41 +260,43 @@ div.vintage-vote div.vintage-score {
   margin-right: 4px;
 }
 
-.vintage-status.online { background: var(--success); }
-.vintage-status.idle { background: var(--warning); }
-.vintage-status.busy { background: var(--danger); }
+.vintage-status.online { background: var(--accent-success); }
+.vintage-status.idle { background: var(--accent-warning); }
+.vintage-status.busy { background: var(--accent-danger); }
 .vintage-status.offline { background: var(--text-muted); }
 
 .vintage-button {
-  background: var(--primary);
+  background: var(--accent-primary);
   color: white;
-  border: 2px solid var(--primary);
+  border: 2px solid var(--accent-primary);
   padding: 8px 16px;
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: all 0.3s;
 }
 
 .vintage-button:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-purple-light);
+  border-color: var(--accent-purple-light);
+  transform: translateY(-1px);
 }
 
 .vintage-button.secondary {
-  background: var(--success);
-  border-color: var(--success);
+  background: var(--accent-success);
+  border-color: var(--accent-success);
 }
 
 .vintage-button.secondary:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 
 /* UNIFORM BADGES & STATUS - High Contrast */
 .badge {
-  background: var(--primary);
+  background: var(--accent-primary);
   color: white;
   padding: 2px 6px;
   border-radius: 3px;
@@ -248,56 +304,57 @@ div.vintage-vote div.vintage-score {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--accent-primary);
 }
 
 .badge.super-dad {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-warning);
+  border-color: var(--accent-warning);
+  color: var(--text-primary);
   animation: pulse 2s infinite;
 }
 
 .badge.rising-star {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
 }
 
 .badge.expert {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
+  background: var(--accent-success);
+  border-color: var(--accent-success);
 }
 
 .badge.neon {
-  background: var(--warning);
-  border-color: var(--warning);
+  background: var(--accent-warning);
+  border-color: var(--accent-warning);
 }
 
 /* UNIFORM STATUS INDICATORS - Reddit-inspired Colors */
 .status-online {
   width: 8px;
   height: 8px;
-  background: var(--success);
+  background: var(--accent-success);
   border-radius: 50%;
-  border: 2px solid var(--bg-card);
-  box-shadow: 0 0 0 1px var(--success);
+  border: 2px solid var(--bg-secondary);
+  box-shadow: 0 0 0 1px var(--accent-success);
   animation: pulse 2s infinite;
 }
 
 .status-typing {
   width: 8px;
   height: 8px;
-  background: var(--accent);
+  background: var(--accent-primary);
   border-radius: 50%;
-  border: 2px solid var(--bg-card);
+  border: 2px solid var(--bg-secondary);
   animation: pulse 1s infinite;
 }
 
 .status-busy {
   width: 8px;
   height: 8px;
-  background: var(--danger);
+  background: var(--accent-danger);
   border-radius: 50%;
-  border: 2px solid var(--bg-card);
+  border: 2px solid var(--bg-secondary);
 }
 
 .status-offline {
@@ -305,29 +362,31 @@ div.vintage-vote div.vintage-score {
   height: 8px;
   background: var(--text-muted);
   border-radius: 50%;
-  border: 2px solid var(--bg-card);
+  border: 2px solid var(--bg-secondary);
 }
 
 /* EARLY 2000s INPUT STYLING */
 .vintage-input {
-  background: var(--bg-card);
+  background: var(--surface);
   border: 2px solid var(--border);
   border-radius: 4px;
   padding: 8px;
   font-family: Arial, sans-serif;
   font-size: 14px;
   transition: border-color 0.2s ease;
+  color: var(--text-primary);
+  backdrop-filter: blur(10px);
 }
 
 .vintage-input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
 }
 
 /* UNIFORM CATEGORY TAGS */
 .category-tag {
-  background: var(--primary);
+  background: var(--accent-primary);
   color: white;
   padding: 4px 8px;
   font-size: 11px;
@@ -335,28 +394,30 @@ div.vintage-vote div.vintage-score {
   text-decoration: none;
   display: inline-block;
   margin: 2px;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--accent-primary);
+  transition: all 0.3s;
 }
 
 .category-tag:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--chat-purple);
+  border-color: var(--chat-purple);
   color: white;
+  transform: translateY(-1px);
 }
 
 .category-tag.home-repair { 
-  background: var(--primary); 
-  border-color: var(--primary);
+  background: var(--primary-blue); 
+  border-color: var(--primary-blue);
 }
 .category-tag.cooking { 
-  background: var(--accent); 
-  border-color: var(--accent);
+  background: var(--accent-warning); 
+  border-color: var(--accent-warning);
 }
 .category-tag.car-trouble { 
-  background: var(--primary-hover); 
-  border-color: var(--primary-hover);
+  background: var(--accent-danger); 
+  border-color: var(--accent-danger);
 }
 .category-tag.parenting { 
-  background: var(--primary); 
-  border-color: var(--primary);
+  background: var(--accent-pink); 
+  border-color: var(--accent-pink);
 }

@@ -1,725 +1,743 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { 
-  Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, Lightbulb
-} from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react'
+import Link from 'next/link'
+import './feed.css'
 
-const DadKnowsHomepage = () => {
-  const [solvedToday, setSolvedToday] = useState(1847);
-  const [nodsToday, setNodsToday] = useState(8293);
-  const [expertsOnline, setExpertsOnline] = useState(247);
-  const [nodCounts, setNodCounts] = useState<Record<string, number>>({});
-  const [activeFilter, setActiveFilter] = useState<'trending' | 'recent' | 'solved' | 'live'>('trending');
+// Types
+interface Message {
+  type: 'user' | 'ai' | 'expert' | 'stat'
+  text: string
+  delay: number
+  success?: boolean
+  name?: string
+}
+
+interface ConversationTemplate {
+  user: string
+  username: string
+  category: string
+  avatar: string
+  aiName: string
+  messages: Message[]
+}
+
+export default function LiveFeedPage() {
+  const [nodCounter, setNodCounter] = useState(8299)
+  const [cardsGenerated, setCardsGenerated] = useState(3)
+  const [loading, setLoading] = useState(false)
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // Conversation templates
+  const conversationTemplates: ConversationTemplate[] = [
+    {
+      user: 'MD',
+      username: 'MomDebbie',
+      category: 'Parenting',
+      avatar: '👶',
+      aiName: 'ParentAI',
+      messages: [
+        { type: 'user', text: 'Baby won\'t stop crying!! 3AM!! 😭😭', delay: 0 },
+        { type: 'ai', text: 'Try the <span class="ai-highlight">5 S\'s</span>: Swaddle, Side, Shush!', delay: 200 },
+        { type: 'user', text: 'OMG trying now...', delay: 400 },
+        { type: 'ai', text: 'Swing gently + white noise app! 📱', delay: 550 },
+        { type: 'expert', name: 'SuperMom', text: 'Hair dryer sound works too!', delay: 750 },
+        { type: 'user', text: 'BABY SLEEPING!! THANK YOU!! 🙏', delay: 950, success: true },
+        { type: 'stat', text: '🔥 1.2k parents saved tonight!', delay: 1100 }
+      ]
+    },
+    {
+      user: 'BB',
+      username: 'BrokeBob',
+      category: 'Home Repair',
+      avatar: '🔨',
+      aiName: 'FixItAI',
+      messages: [
+        { type: 'user', text: 'Toilet running nonstop! Water bill!! 💸', delay: 0 },
+        { type: 'ai', text: 'Easy fix! <span class="ai-highlight">$5 flapper</span> replacement!', delay: 180 },
+        { type: 'user', text: 'Where is flapper??', delay: 350 },
+        { type: 'ai', text: 'Inside tank! Red rubber thing! 🔴', delay: 500 },
+        { type: 'user', text: 'Found it! Now what?', delay: 650 },
+        { type: 'ai', text: 'Pop off old, snap on new! 2 min job!', delay: 800 },
+        { type: 'expert', name: 'PlumberPete', text: 'Turn water off first! ⚠️', delay: 950 },
+        { type: 'user', text: 'FIXED! Saved $200!! 💪', delay: 1150, success: true }
+      ]
+    },
+    {
+      user: 'HS',
+      username: 'HungrySteve',
+      category: 'Cooking',
+      avatar: '🍔',
+      aiName: 'ChefAI',
+      messages: [
+        { type: 'user', text: 'Steak is GREY not brown! WTF! 😤', delay: 0 },
+        { type: 'ai', text: 'Pan not hot enough! <span class="ai-highlight">SMOKING hot</span> first!', delay: 200 },
+        { type: 'user', text: 'How hot exactly??', delay: 380 },
+        { type: 'ai', text: 'Water drop should dance! 💃 Then oil!', delay: 520 },
+        { type: 'expert', name: 'GrillMaster', text: 'Cast iron = best sear! 🔥', delay: 700 },
+        { type: 'user', text: 'Holy shit perfect crust!! 🥩', delay: 900, success: true },
+        { type: 'stat', text: '✅ 3.4k perfect steaks today!', delay: 1050 }
+      ]
+    }
+  ]
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSolvedToday(prev => prev + Math.floor(Math.random() * 3));
-      setNodsToday(prev => prev + Math.floor(Math.random() * 10));
-      setExpertsOnline(prev => prev + Math.floor(Math.random() * 3) - 1);
-    }, 5000);
+    // Set up intersection observer for chat animations
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const chatId = entry.target.querySelector('[data-chat-id]')?.getAttribute('data-chat-id')
+          if (chatId && !entry.target.hasAttribute('data-played')) {
+            entry.target.setAttribute('data-played', 'true')
+            playChat(chatId)
+            
+            // Restart animation after completion
+            setTimeout(() => {
+              entry.target.removeAttribute('data-played')
+              playChat(chatId)
+            }, 3500)
+          }
+        }
+      })
+    }, { threshold: 0.3 })
 
-    return () => clearInterval(interval);
-  }, []);
+    // Observe initial cards
+    const cards = document.querySelectorAll('.knowledge-card')
+    cards.forEach(card => {
+      observerRef.current?.observe(card)
+    })
 
+    // Start intervals
+    const nodInterval = setInterval(() => {
+      setNodCounter(prev => prev + Math.floor(Math.random() * 10) + 1)
+    }, 2000)
 
-  // Thread data for different filters
-  const trendingThreads = [
-    {
-      id: '1',
-      author: 'SarahM',
-      time: '2 minutes ago',
-      category: 'Plumbing',
-      solved: true,
-      title: 'Help! Water won\'t stop running in toilet!',
-      expert: 'MikeThePlumber',
-      expertNods: '2.8k',
-      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
-      nods: 127,
-      comments: 8,
-      avatar: 'S',
-      avatarColor: 'from-blue-500 to-purple-600',
-      typing: false
-    },
-    {
-      id: '2',
-      author: 'DavidK',
-      time: '5 minutes ago',
-      category: 'Cooking',
-      solved: false,
-      title: 'My bread keeps coming out dense. What am I doing wrong?',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 45,
-      comments: 12,
-      avatar: 'D',
-      avatarColor: 'from-green-500 to-teal-600',
-      typing: true
+    const commentInterval = setInterval(addRandomComment, 3000)
+    const reactionInterval = setInterval(createReactions, 1000)
+
+    // Handle scroll for infinite loading
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
+        loadMoreCards()
+      }
     }
-  ];
+    window.addEventListener('scroll', handleScroll)
 
-  const recentThreads = [
-    {
-      id: '3',
-      author: 'NewbieBob',
-      time: '1 minute ago',
-      category: 'Electrical',
-      solved: false,
-      title: 'Light switch making buzzing sound - is this dangerous?',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 23,
-      comments: 5,
-      avatar: 'N',
-      avatarColor: 'from-yellow-500 to-orange-600',
-      typing: false
-    },
-    {
-      id: '4',
-      author: 'HandyMike',
-      time: '3 minutes ago',
-      category: 'Home Repair',
-      solved: false,
-      title: 'Drywall repair techniques for beginners',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 67,
-      comments: 9,
-      avatar: 'H',
-      avatarColor: 'from-purple-500 to-pink-600',
-      typing: false
-    },
-    {
-      id: '1',
-      author: 'SarahM',
-      time: '2 minutes ago',
-      category: 'Plumbing',
-      solved: true,
-      title: 'Help! Water won\'t stop running in toilet!',
-      expert: 'MikeThePlumber',
-      expertNods: '2.8k',
-      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
-      nods: 127,
-      comments: 8,
-      avatar: 'S',
-      avatarColor: 'from-blue-500 to-purple-600',
-      typing: false
+    return () => {
+      clearInterval(nodInterval)
+      clearInterval(commentInterval)
+      clearInterval(reactionInterval)
+      window.removeEventListener('scroll', handleScroll)
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
     }
-  ];
+  }, [])
 
-  const solvedThreads = [
-    {
-      id: '1',
-      author: 'SarahM',
-      time: '2 minutes ago',
-      category: 'Plumbing',
-      solved: true,
-      title: 'Help! Water won\'t stop running in toilet!',
-      expert: 'MikeThePlumber',
-      expertNods: '2.8k',
-      solution: 'Classic flapper issue. Turn off water valve behind toilet, flush to empty tank, then replace the rubber flapper. It\'s a $5 fix at any hardware store - takes 10 minutes max!',
-      nods: 127,
-      comments: 8,
-      avatar: 'S',
-      avatarColor: 'from-blue-500 to-purple-600',
-      typing: false
-    },
-    {
-      id: '5',
-      author: 'TeacherTina',
-      time: '1 hour ago',
-      category: 'Cooking',
-      solved: true,
-      title: 'How do I fix overcooked pasta?',
-      expert: 'ChefCarla',
-      expertNods: '1.9k',
-      solution: 'Try rinsing with cold water to stop cooking, then reheat gently in sauce. For future, test pasta 2 minutes before package time!',
-      nods: 89,
-      comments: 15,
-      avatar: 'T',
-      avatarColor: 'from-indigo-500 to-blue-600',
-      typing: false
-    },
-    {
-      id: '6',
-      author: 'SafetyFirst',
-      time: '2 hours ago',
-      category: 'Electrical',
-      solved: true,
-      title: 'GFCI outlet keeps tripping - troubleshooting help?',
-      expert: 'ElectricianEd',
-      expertNods: '3.2k',
-      solution: 'Check for moisture first, then test appliances one by one. If it trips immediately, you likely have a ground fault. Call a licensed electrician if unsure!',
-      nods: 156,
-      comments: 23,
-      avatar: 'S',
-      avatarColor: 'from-red-500 to-pink-600',
-      typing: false
-    }
-  ];
+  const playChat = (chatId: string) => {
+    const container = document.querySelector(`[data-chat-id="${chatId}"]`) as HTMLElement
+    if (!container) return
+    
+    const messages = container.querySelectorAll('.chat-message')
+    const typingIndicator = container.querySelector('.typing-indicator') as HTMLElement
+    const confidenceMeters = container.querySelectorAll('.confidence-meter')
+    const confidenceFills = container.querySelectorAll('.confidence-fill')
+    const verifications = container.querySelectorAll('.expert-verification')
+    const successFlash = container.querySelector('.success-flash') as HTMLElement
+    
+    // Reset all elements
+    messages.forEach(msg => msg.classList.remove('show'))
+    if (typingIndicator) typingIndicator.classList.remove('show')
+    confidenceMeters.forEach(m => m.classList.remove('show'))
+    confidenceFills.forEach(f => f.classList.remove('animate'))
+    verifications.forEach(v => v.classList.remove('show'))
+    
+    // Play sequence
+    messages.forEach((message) => {
+      const msgElement = message as HTMLElement
+      const delay = parseInt(msgElement.dataset.delay || '0')
+      
+      setTimeout(() => {
+        if (message.classList.contains('ai-message') && typingIndicator) {
+          typingIndicator.classList.add('show')
+          setTimeout(() => {
+            typingIndicator.classList.remove('show')
+            message.classList.add('show')
+            
+            if (Math.random() > 0.5) {
+              createReactionEmoji(container as HTMLElement)
+            }
+          }, 200)
+        } else {
+          message.classList.add('show')
+          
+          if (message.querySelector('.user-bubble[style*="4CAF50"]')) {
+            if (successFlash) {
+              successFlash.classList.add('show')
+              setTimeout(() => successFlash.classList.remove('show'), 500)
+            }
+          }
+        }
+      }, delay)
+    })
+    
+    // Animate confidence meters
+    confidenceMeters.forEach((meter, index) => {
+      const meterElement = meter as HTMLElement
+      const fill = confidenceFills[index] as HTMLElement
+      const meterDelay = parseInt(meterElement.dataset.delay || String(1000 + index * 200))
+      setTimeout(() => {
+        meter.classList.add('show')
+        if (fill) {
+          setTimeout(() => {
+            fill.classList.add('animate')
+          }, 100)
+        }
+      }, meterDelay)
+    })
+    
+    // Show verifications
+    verifications.forEach((verification, index) => {
+      const verifyElement = verification as HTMLElement
+      const verifyDelay = parseInt(verifyElement.dataset.delay || String(1200 + index * 200))
+      setTimeout(() => {
+        verifyElement.style.display = 'flex'
+        verification.classList.add('show')
+      }, verifyDelay)
+    })
+  }
 
-  const liveFeedThreads = [
-    {
-      id: '7',
-      author: 'QuickFix',
-      time: '30 seconds ago',
-      category: 'Plumbing',
-      solved: false,
-      title: 'Kitchen sink clogged - need immediate help!',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 12,
-      comments: 3,
-      avatar: 'Q',
-      avatarColor: 'from-red-500 to-pink-600',
-      typing: true
-    },
-    {
-      id: '8',
-      author: 'EmergencyMom',
-      time: '1 minute ago',
-      category: 'Cooking',
-      solved: false,
-      title: 'Baby food too hot - how to cool quickly?',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 8,
-      comments: 2,
-      avatar: 'E',
-      avatarColor: 'from-orange-500 to-yellow-600',
-      typing: true
-    },
-    {
-      id: '9',
-      author: 'UrgentDad',
-      time: '2 minutes ago',
-      category: 'Electrical',
-      solved: false,
-      title: 'Power went out - circuit breaker keeps tripping',
-      expert: null,
-      expertNods: null,
-      solution: null,
-      nods: 15,
-      comments: 4,
-      avatar: 'U',
-      avatarColor: 'from-yellow-500 to-orange-600',
-      typing: true
-    }
-  ];
+  const createReactionEmoji = (container: HTMLElement) => {
+    const reactions = ['❤️', '👍', '🔥', '💯', '🙌', '✨', '💪', '🎯']
+    const emoji = document.createElement('div')
+    emoji.className = 'reaction-emoji'
+    emoji.textContent = reactions[Math.floor(Math.random() * reactions.length)]
+    emoji.style.left = Math.random() * 100 + 'px'
+    emoji.style.bottom = '100px'
+    container.appendChild(emoji)
+    setTimeout(() => emoji.remove(), 2000)
+  }
 
-  const getCurrentThreads = () => {
-    switch (activeFilter) {
-      case 'recent':
-        return recentThreads;
-      case 'solved':
-        return solvedThreads;
-      case 'live':
-        return liveFeedThreads;
-      default:
-        return trendingThreads;
+  const createFloatingReaction = (containerId: string) => {
+    const container = document.getElementById(containerId)
+    if (!container) return
+    
+    const reactions = ['❤️', '👍', '🔥', '😂', '💯', '🙌', '✨', '💪', '🎯', '⚡']
+    const reaction = document.createElement('div')
+    reaction.className = 'floating-reaction'
+    reaction.textContent = reactions[Math.floor(Math.random() * reactions.length)]
+    reaction.style.left = Math.random() * 80 + 'px'
+    reaction.style.animationDelay = Math.random() * 0.5 + 's'
+    
+    container.appendChild(reaction)
+    setTimeout(() => reaction.remove(), 3000)
+  }
+
+  const createReactions = () => {
+    document.querySelectorAll('.reaction-stream').forEach(stream => {
+      if (Math.random() > 0.7) {
+        createFloatingReaction(stream.id)
+      }
+    })
+  }
+
+  const addRandomComment = () => {
+    const comments = [
+      { user: 'DadMike', text: 'This is genius!' },
+      { user: 'Sarah92', text: 'Worked perfectly!' },
+      { user: 'JoeFixIt', text: 'Can confirm ✅' },
+      { user: 'NewMom', text: 'Lifesaver!' },
+      { user: 'TechGuy', text: 'Mind blown 🤯' },
+      { user: 'HomeDIY', text: 'Saved $$$!' }
+    ]
+    
+    const commentSections = document.querySelectorAll('.live-comments')
+    if (commentSections.length === 0) return
+    
+    const section = commentSections[Math.floor(Math.random() * commentSections.length)]
+    const comment = comments[Math.floor(Math.random() * comments.length)]
+    
+    const bubble = document.createElement('div')
+    bubble.className = 'comment-bubble'
+    bubble.innerHTML = `<span class="comment-user">${comment.user}:</span> ${comment.text}`
+    
+    section.appendChild(bubble)
+    
+    if (section.children.length > 2) {
+      const firstChild = section.firstChild
+      if (firstChild) {
+        section.removeChild(firstChild)
+      }
     }
-  };
+  }
+
+  const generateChatCard = (template: ConversationTemplate) => {
+    const chatId = 'chat' + Date.now() + Math.random().toString(36).substr(2, 9)
+    
+    let messagesHTML = ''
+    template.messages.forEach(msg => {
+      if (msg.type === 'user') {
+        const bgColor = msg.success ? 
+          'success-gradient' : 
+          'primary-gradient'
+        messagesHTML += `
+          <div class="chat-message user-message" data-delay="${msg.delay}">
+            <div class="user-bubble ${bgColor}">
+              <div class="message-text">${msg.text}</div>
+            </div>
+          </div>`
+      } else if (msg.type === 'ai') {
+        messagesHTML += `
+          <div class="chat-message ai-message" data-delay="${msg.delay}">
+            <div class="ai-bubble">
+              <div class="ai-header">
+                <div class="ai-avatar">${template.avatar}</div>
+                <span class="ai-name">${template.aiName}</span>
+              </div>
+              <div class="ai-response">${msg.text}</div>
+            </div>
+          </div>`
+      } else if (msg.type === 'expert') {
+        messagesHTML += `
+          <div class="chat-message ai-message" data-delay="${msg.delay}">
+            <div class="ai-bubble expert-bubble">
+              <div class="ai-header">
+                <div class="ai-avatar expert-avatar-bg">${msg.name?.substring(0, 2)}</div>
+                <span class="ai-name">${msg.name}</span>
+                <span class="ai-badge expert-badge">EXPERT</span>
+              </div>
+              <div class="ai-response">${msg.text}</div>
+            </div>
+          </div>`
+      } else if (msg.type === 'stat') {
+        messagesHTML += `
+          <div class="chat-message ai-message" data-delay="${msg.delay}">
+            <div class="ai-bubble stat-bubble">
+              <div class="expert-verification show" style="margin: 0; padding: 0; border: none;">
+                <div class="expert-tag">
+                  ${msg.text}
+                </div>
+              </div>
+            </div>
+          </div>`
+      }
+    })
+    
+    const cardHTML = `
+      <div class="live-badge">
+        <span class="live-dot-${['white', 'gold', 'teal', 'pink'][Math.floor(Math.random() * 4)]}"></span>
+        ${['LIVE', 'VIRAL', 'TRENDING', 'HOT'][Math.floor(Math.random() * 4)]}
+      </div>
+      
+      <div class="playback-indicator">
+        <span class="playback-dot"></span>
+        <span class="playback-speed">3x SPEED</span>
+      </div>
+      
+      <div class="card-user-info" onclick="window.location.href='/profile/${template.username.toLowerCase()}'">
+        <div class="card-avatar">${template.user}</div>
+        <div class="card-user-details">
+          <div class="card-username">${template.username}</div>
+          <div class="card-meta">${template.category} • Just now</div>
+        </div>
+      </div>
+      
+      <div class="chat-replay-container" data-chat-id="${chatId}" onclick="window.location.href='/thread/${template.category.toLowerCase().replace(/\s+/g, '-')}-${template.username.toLowerCase()}-${Date.now()}'">
+        <div class="success-flash"></div>
+        <div class="typing-indicator" data-delay="150">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+        ${messagesHTML}
+      </div>
+      
+      <div class="auto-play-progress">
+        <div class="progress-fill"></div>
+      </div>
+      
+      <div class="reaction-stream" id="reactions${chatId}"></div>
+      
+      <div class="live-comments">
+        <div class="comment-bubble">
+          <span class="comment-user">User${Math.floor(Math.random() * 999)}:</span> ${['This works!', 'Thank you!', 'Trying now!', 'Amazing!'][Math.floor(Math.random() * 4)]}
+        </div>
+      </div>
+      
+      <div class="engagement-bar">
+        <div class="engagement-btn">
+          <span>👍</span>
+          <span>${(Math.random() * 9 + 0.5).toFixed(1)}k</span>
+        </div>
+        <div class="engagement-btn">
+          <span>💬</span>
+          <span>${Math.floor(Math.random() * 900 + 100)}</span>
+        </div>
+        <div class="engagement-btn">
+          <span>🔖</span>
+          <span>Save</span>
+        </div>
+        <div class="engagement-btn">
+          <span>↗️</span>
+          <span>Share</span>
+        </div>
+      </div>
+    `
+    
+    return { html: cardHTML, id: chatId }
+  }
+
+  const loadMoreCards = () => {
+    if (loading) return
+    setLoading(true)
+    
+    const loader = document.getElementById('loader')
+    if (loader) loader.style.display = 'block'
+    
+    setTimeout(() => {
+      for (let i = 0; i < 3; i++) {
+        const template = conversationTemplates[Math.floor(Math.random() * conversationTemplates.length)]
+        const { html, id } = generateChatCard(template)
+        
+        const card = document.createElement('div')
+        card.className = 'knowledge-card live-card'
+        card.style.background = `linear-gradient(135deg, hsl(${Math.random() * 60 + 200}, 30%, 10%) 0%, hsl(${Math.random() * 60 + 240}, 40%, 20%) 100%)`
+        card.innerHTML = html
+        
+        document.querySelector('.feed-container')?.insertBefore(card, loader)
+        
+        if (observerRef.current) {
+          observerRef.current.observe(card)
+        }
+        
+        setCardsGenerated(prev => prev + 1)
+      }
+      
+      if (loader) loader.style.display = 'none'
+      setLoading(false)
+    }, 500)
+  }
+
+  const handleEngagementClick = (e: React.MouseEvent) => {
+    const btn = (e.target as HTMLElement).closest('.engagement-btn')
+    if (!btn) return
+    
+    btn.classList.toggle('active')
+    
+    const card = btn.closest('.knowledge-card')
+    const reactionContainer = card?.querySelector('.reaction-stream')
+    if (reactionContainer) {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          createFloatingReaction(reactionContainer.id)
+        }, i * 100)
+      }
+    }
+    
+    const countSpan = btn.querySelector('span:last-child')
+    if (countSpan && !isNaN(parseFloat(countSpan.textContent || '0'))) {
+      let count = parseFloat(countSpan.textContent || '0')
+      if (countSpan.textContent?.includes('k')) {
+        count = parseFloat(countSpan.textContent) * 1000
+      }
+      count += 1
+      countSpan.textContent = count > 1000 ? 
+        (count / 1000).toFixed(1) + 'k' : 
+        Math.floor(count).toString()
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="text-2xl font-bold text-blue-600 flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">D</div>
-                DadKnows
-              </Link>
-              
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input 
-                  type="text" 
-                  placeholder="Search for help..." 
-                  className="w-96 bg-gray-100 rounded-full px-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            <nav className="flex items-center gap-2">
-              <Link href="/" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
-                <Home className="w-4 h-4" />
-                Home
-              </Link>
-              <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
-                <Users className="w-4 h-4" />
-                Communities
-              </Link>
-              <Link href="/education" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
-                <BookOpen className="w-4 h-4" />
-                Learn AI
-              </Link>
-              <Link href="/leaderboard" className="px-3 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-2 text-sm font-bold text-gray-700">
-                <Trophy className="w-4 h-4" />
-                Rankings
-              </Link>
-              
-              <div className="ml-4 flex items-center gap-3 border-l border-gray-200 pl-4">
-                <button className="relative p-2 hover:bg-gray-100 rounded-lg">
-                  <Bell className="w-5 h-5 text-gray-600" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-                <button className="relative p-2 hover:bg-gray-100 rounded-lg">
-                  <MessageSquare className="w-5 h-5 text-gray-600" />
-                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">3</span>
-                </button>
-                <a href="/profile" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  JD
-                </a>
-              </div>
-            </nav>
+    <div className="app-wrapper">
+      {/* HEADER */}
+      <div className="header">
+        <div className="nav-bar">
+          <div className="logo">
+            🛠️ DadKnows
+          </div>
+          <div className="search-bar">
+            <input className="search-input" placeholder="Search for help..." />
+          </div>
+          <div className="nav-items">
+            <Link href="/" className="nav-item">🏠 Home</Link>
+            <div className="nav-item">👥 Communities</div>
+            <div className="nav-item">🤖 Learn AI</div>
+            <div className="nav-item">🏆 Rankings</div>
+            <div className="nav-item">🔔 <span className="notification-badge" style={{padding: '2px 6px', borderRadius: '10px', fontSize: '10px', marginLeft: '-5px'}}>3</span></div>
+            <div className="nav-item">👤</div>
+            <div className="ask-dad-btn">Ask Dad AI →</div>
           </div>
         </div>
-      </header>
-
-      {/* Live Stats Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
-                <Circle className="w-2 h-2 fill-green-500 text-green-500 animate-pulse" />
-                <span className="text-sm font-bold">{expertsOnline} experts online</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+        <div className="stats-bar">
+          <div className="stat-item">
+            <span className="live-dot"></span>
+            <span>247 experts online</span>
+          </div>
+          <div className="stat-item">
+            🔥 <span>1,847 solved today</span>
+          </div>
+          <div className="stat-item">
+            👍 <span id="nod-counter">{nodCounter.toLocaleString()}</span> nods given
+          </div>
+        </div>
+      </div>
+      
+      {/* MAIN CONTAINER */}
+      <div className="main-container">
+        {/* LEFT SIDEBAR */}
+        <div className="left-sidebar">
+          <div className="quick-help">
+            <div className="section-title">Quick Help</div>
+            <div className="category-item active">
+              <div className="category-info">
+                <span className="category-icon">🔧</span>
+                <div>
+                  <div className="category-name">Home Repair</div>
+                  <div className="category-count">247 active</div>
                 </div>
-                <span className="text-sm font-bold">{solvedToday.toLocaleString()} solved today</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.754a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                  </svg>
+              <div className="active-indicator"></div>
+            </div>
+            <div className="category-item">
+              <div className="category-info">
+                <span className="category-icon">🍳</span>
+                <div>
+                  <div className="category-name">Cooking</div>
+                  <div className="category-count">183 active</div>
                 </div>
-                <span className="text-sm font-bold">{nodsToday.toLocaleString()} nods given</span>
+              </div>
+              <div className="active-indicator"></div>
+            </div>
+            <div className="category-item">
+              <div className="category-info">
+                <span className="category-icon">🚗</span>
+                <div>
+                  <div className="category-name">Car Trouble</div>
+                  <div className="category-count">156 active</div>
+                </div>
+              </div>
+              <div className="active-indicator"></div>
+            </div>
+            <div className="category-item">
+              <div className="category-info">
+                <span className="category-icon">👶</span>
+                <div>
+                  <div className="category-name">Parenting</div>
+                  <div className="category-count">94 active</div>
+                </div>
               </div>
             </div>
-            <Link href="/chat" className="bg-white text-blue-600 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-blue-50 transition">
-              Ask Dad AI →
+            <div style={{textAlign: 'center', marginTop: '15px'}}>
+              <Link href="#" className="link-primary" style={{fontSize: '14px'}}>Browse all categories →</Link>
+            </div>
+          </div>
+          
+          <div className="top-experts">
+            <div className="section-title">⭐ Top Experts Online</div>
+            <Link href="/profile/mike-the-plumber" className="expert-item">
+              <div className="expert-avatar">M</div>
+              <div className="expert-info">
+                <div className="expert-name">MikeThePlumber</div>
+                <div className="expert-badge">
+                  Super Dad • 2.8k nods
+                </div>
+              </div>
+              <div className="expert-status">LIVE</div>
+            </Link>
+            <Link href="/profile/chef-carla" className="expert-item">
+              <div className="expert-avatar chef-gradient">C</div>
+              <div className="expert-info">
+                <div className="expert-name">ChefCarla</div>
+                <div className="expert-badge">
+                  Pro Chef • 1.9k nods
+                </div>
+              </div>
+            </Link>
+            <Link href="/profile/techdad99" className="expert-item">
+              <div className="expert-avatar tech-gradient">T</div>
+              <div className="expert-info">
+                <div className="expert-name">TechDad99</div>
+                <div className="expert-badge">
+                  Tech Guru • 1.5k nods
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+        
+        {/* CENTER FEED */}
+        <div className="feed-container" onClick={handleEngagementClick}>
+          <div className="feed-filters">
+            <div className="filter-tab active">🔥 Trending</div>
+            <div className="filter-tab">📍 Recent</div>
+            <div className="filter-tab">✅ Solved</div>
+            <div className="filter-tab">🎯 Live Feed</div>
+          </div>
+          
+          {/* Initial Cards - Using dangerouslySetInnerHTML for the HTML content */}
+          <div className="knowledge-card live-card" dangerouslySetInnerHTML={{__html: `
+            <div class="live-badge">
+              <span style="width: 6px; height: 6px; background: white; border-radius: 50%;"></span>
+              LIVE REPLAY
+            </div>
+            
+            <div class="playback-indicator">
+              <span class="playback-dot"></span>
+              <span class="playback-speed">3x SPEED</span>
+            </div>
+            
+            <div class="card-user-info" onclick="window.location.href='/profile/johndad42'">
+              <div class="card-avatar">JD</div>
+              <div class="card-user-details">
+                <div class="card-username">JohnDad42</div>
+                <div class="card-meta">Car Trouble • 2 min ago</div>
+              </div>
+            </div>
+            
+            <div class="chat-replay-container" data-chat-id="chat1" onclick="window.location.href='/thread/car-clicking-when-turning'">
+              <div class="success-flash"></div>
+              
+              <!-- Initial chat messages here -->
+              <div class="chat-message user-message" data-delay="0">
+                <div class="user-bubble">
+                  <div class="message-text">
+                    Car clicking when turning!! HELP! 😰
+                  </div>
+                </div>
+              </div>
+              
+              <div class="typing-indicator" data-delay="200">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              
+              <div class="chat-message ai-message" data-delay="400">
+                <div class="ai-bubble">
+                  <div class="ai-header">
+                    <div class="ai-avatar">🔧</div>
+                    <span class="ai-name">MechanicAI</span>
+                  </div>
+                  <div class="ai-response">
+                    <span class="ai-highlight">CV joint</span> issue! ~$280 fix
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="auto-play-progress">
+              <div class="progress-fill"></div>
+            </div>
+            
+            <div class="reaction-stream" id="reactions1"></div>
+            
+            <div class="live-comments">
+              <div class="comment-bubble">
+                <span class="comment-user">Mike:</span> Exact same issue!
+              </div>
+            </div>
+            
+            <div class="engagement-bar">
+              <div class="engagement-btn active">
+                <span>👍</span>
+                <span>2.8k</span>
+              </div>
+              <div class="engagement-btn">
+                <span>💬</span>
+                <span>147</span>
+              </div>
+              <div class="engagement-btn">
+                <span>🔖</span>
+                <span>Save</span>
+              </div>
+              <div class="engagement-btn">
+                <span>↗️</span>
+                <span>Share</span>
+              </div>
+            </div>
+          `}} />
+          
+          {/* Loading Spinner */}
+          <div className="loading-spinner" id="loader">
+            <div className="spinner"></div>
+            <p className="text-muted" style={{marginTop: '20px'}}>Loading more wisdom...</p>
+          </div>
+        </div>
+        
+        {/* RIGHT SIDEBAR */}
+        <div className="right-sidebar">
+          <div className="dad-bot-section">
+            <div className="dad-bot-header">
+              <div className="dad-bot-icon">🤖</div>
+              <div className="dad-bot-status">
+                <div className="dad-bot-title">Dad&apos;s Here to Help</div>
+                <div className="helping-count">● Currently helping 14 people</div>
+              </div>
+            </div>
+            <div className="dad-bot-preview">
+              <div className="preview-text">
+                Hey there! What&apos;s going on? Car trouble? Leaky faucet? Burnt dinner? Whatever it is, we&apos;ll figure it out together!
+              </div>
+              <div className="active-helpers">
+                <span>Active experts:</span>
+                <div className="helper-avatars">
+                  <div className="helper-avatar">MK</div>
+                  <div className="helper-avatar">CC</div>
+                  <div className="helper-avatar">TD</div>
+                </div>
+                <span>standing by</span>
+              </div>
+            </div>
+            <button className="open-chat-btn">Open Full Chat →</button>
+          </div>
+          
+          <div className="champions-section">
+            <div className="section-title">🏆 Today&apos;s Champions</div>
+            <Link href="/profile/electricianed" className="champion-item">
+              <span className="champion-rank gold">1</span>
+              <div className="champion-info">
+                <div className="champion-name">ElectricianEd</div>
+                <div className="champion-stats">847 nods • 42 helps</div>
+              </div>
+            </Link>
+            <Link href="/profile/chef-carla" className="champion-item">
+              <span className="champion-rank silver">2</span>
+              <div className="champion-info">
+                <div className="champion-name">ChefCarla</div>
+                <div className="champion-stats">623 nods • 31 helps</div>
+              </div>
+            </Link>
+            <Link href="/profile/mechanicdave" className="champion-item">
+              <span className="champion-rank bronze">3</span>
+              <div className="champion-info">
+                <div className="champion-name">MechanicDave</div>
+                <div className="champion-stats">512 nods • 28 helps</div>
+              </div>
+            </Link>
+            <div style={{textAlign: 'center', marginTop: '15px'}}>
+              <Link href="#" className="link-primary" style={{fontSize: '14px'}}>View All →</Link>
+            </div>
+          </div>
+          
+          <div className="rising-stars">
+            <div className="section-title text-dark">🌟 Rising Stars</div>
+            <Link href="/profile/newbiebob" className="star-item">
+              <span className="star-icon">🔥</span>
+              <div className="star-info">
+                <div className="star-name">NewbieBob</div>
+                <div className="star-achievement">+342 today!</div>
+              </div>
+            </Link>
+            <Link href="/profile/teachertina" className="star-item">
+              <span className="star-icon">⚡</span>
+              <div className="star-info">
+                <div className="star-name">TeacherTina</div>
+                <div className="star-achievement">+289 today!</div>
+              </div>
             </Link>
           </div>
         </div>
       </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <div className="col-span-3">
-            {/* Quick Categories */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
-                <h3 className="font-bold text-gray-900">Quick Help</h3>
-              </div>
-              <div className="p-2">
-                <Link href="/categories/home-repair" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Wrench className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">Home Repair</div>
-                    <div className="text-xs font-bold text-gray-500">247 active</div>
-                  </div>
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </Link>
-                <Link href="/categories/cooking" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <ChefHat className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">Cooking</div>
-                    <div className="text-xs font-bold text-gray-500">183 active</div>
-                  </div>
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </Link>
-                <Link href="/categories/car-trouble" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Car className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">Car Trouble</div>
-                    <div className="text-xs font-bold text-gray-500">156 active</div>
-                  </div>
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                </Link>
-                <Link href="/categories/parenting" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Baby className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">Parenting</div>
-                    <div className="text-xs font-bold text-gray-500">94 active</div>
-                  </div>
-                  <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                </Link>
-              </div>
-              <div className="px-4 py-2 border-t border-gray-200">
-                <Link href="/categories" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
-                  Browse all categories →
-                </Link>
-              </div>
-            </div>
-
-            {/* Top Experts Online */}
-            <div className="bg-white rounded-xl border border-gray-200 mt-4 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-blue-50">
-                <h3 className="font-bold text-gray-900">Top Experts Online</h3>
-                <Star className="w-4 h-4 text-yellow-500" />
-              </div>
-              <div className="p-2">
-                <Link href="/experts/mike-the-plumber" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="relative">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                      M
-                    </div>
-                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">MikeThePlumber</div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Super Dad</span>
-                      <span className="text-xs font-bold text-gray-500">2.8k nods</span>
-                    </div>
-                  </div>
-                </Link>
-                <Link href="/experts/chef-carla" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="relative">
-                    <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                      C
-                    </div>
-                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold text-gray-900">ChefCarla</div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-bold">Pro Chef</span>
-                      <span className="text-xs font-bold text-gray-500">1.9k nods</span>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Feed */}
-          <div className="col-span-6">
-            {/* Dad AI Chat Interface */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 mb-4 border border-blue-200">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xl">
-                  🧔
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-lg font-bold text-gray-900">Dad&apos;s Here to Help</h2>
-                  <span className="text-xs font-bold text-green-600 flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    Currently helping 14 people
-                  </span>
-                </div>
-                <Link href="/chat" className="text-sm text-blue-600 hover:text-blue-700 font-bold">
-                  Open Full Chat →
-                </Link>
-              </div>
-              
-              <div className="bg-white rounded-lg p-4 mb-4 min-h-[120px] border border-gray-200">
-                <p className="text-gray-700 mb-2 font-bold">Hey there! What&apos;s going on? Car trouble? Leaky faucet? Burnt dinner?</p>
-                <p className="text-gray-600 text-sm font-bold">I&apos;ve got <span className="text-blue-600 font-bold">ChefCarla (2,847 nods)</span> and <span className="text-blue-600 font-bold">MikeThePlumber (1,923 nods)</span> standing by if we need expert backup!</p>
-              </div>
-              
-              <div className="relative">
-                <input 
-                  type="text" 
-                  placeholder="Type your question here... (e.g., &apos;My toilet won&apos;t stop running&apos;)"
-                  className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 pr-20 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      window.location.href = '/chat';
-                    }
-                  }}
-                />
-                <button 
-                  onClick={() => window.location.href = '/chat'}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg transition text-sm font-bold"
-                >
-                  Ask
-                </button>
-              </div>
-              
-              <div className="flex items-center justify-between mt-3">
-                <div className="flex gap-2">
-                  <Link href="/categories/home-repair" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
-                    🚿 Plumbing issue
-                  </Link>
-                  <Link href="/categories/cooking" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
-                    🍳 Cooking help
-                  </Link>
-                  <Link href="/categories/car-trouble" className="text-xs font-bold bg-white border border-gray-200 px-3 py-1 rounded-full hover:bg-gray-50 transition cursor-pointer">
-                    🚗 Car problem
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Feed Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={() => setActiveFilter('trending')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
-                    activeFilter === 'trending' 
-                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  <TrendingUp className="w-4 h-4" />
-                  Trending
-                </button>
-                <button 
-                  onClick={() => setActiveFilter('recent')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
-                    activeFilter === 'recent' 
-                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  <Clock className="w-4 h-4" />
-                  Recent
-                </button>
-                <button 
-                  onClick={() => setActiveFilter('solved')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
-                    activeFilter === 'solved' 
-                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  Solved
-                </button>
-                <button 
-                  onClick={() => setActiveFilter('live')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-bold transition ${
-                    activeFilter === 'live' 
-                      ? 'bg-blue-50 border-blue-200 text-gray-700' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                  Live Feed
-                </button>
-              </div>
-            </div>
-
-            {/* Feed Items */}
-            <div className="space-y-4">
-              {getCurrentThreads().map((thread) => (
-                <Link key={thread.id} href={`/thread/${thread.id}`} className="block">
-                  <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition cursor-pointer">
-                    <div className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 bg-gradient-to-br ${thread.avatarColor} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
-                            {thread.avatar}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold text-gray-900">{thread.author}</span>
-                              <span className="text-xs font-bold text-gray-500">{thread.time}</span>
-                              {thread.solved && (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
-                              )}
-                              {thread.typing && (
-                                <span className="text-xs text-orange-500 flex items-center gap-1">
-                                  <Circle className="w-1.5 h-1.5 fill-orange-500" />
-                                  3 experts typing...
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${
-                                thread.category === 'Plumbing' ? 'bg-blue-100 text-blue-700' :
-                                thread.category === 'Cooking' ? 'bg-orange-100 text-orange-700' :
-                                thread.category === 'Electrical' ? 'bg-yellow-100 text-yellow-700' :
-                                thread.category === 'Home Repair' ? 'bg-purple-100 text-purple-700' :
-                                'bg-gray-100 text-gray-700'
-                              }`}>
-                                {thread.category}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <button className="text-gray-400 hover:text-gray-600">
-                          <MoreHorizontal className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      <h3 className="font-bold text-gray-900 mb-2">{thread.title}</h3>
-                      
-                      {thread.solved && thread.solution && (
-                        <div className="bg-green-50 rounded-lg p-3 mb-3 border border-green-200">
-                          <div className="flex items-start gap-2 mb-2">
-                            <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-bold text-sm text-gray-900">{thread.expert}</span>
-                                <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Super Dad</span>
-                                <span className="text-xs font-bold text-gray-500">• {thread.expertNods} nods</span>
-                              </div>
-                              <p className="text-sm font-bold text-gray-700">
-                                {thread.solution}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {thread.typing && (
-                        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                          <div className="flex items-center gap-2">
-                            <div className="flex -space-x-2">
-                              <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-red-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                                C
-                              </div>
-                              <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                                B
-                              </div>
-                              <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                                G
-                              </div>
-                            </div>
-                            <span className="text-xs font-bold text-gray-600">ChefCarla, BakerBeth, and GrandmaGrace are crafting responses...</span>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex items-center gap-4">
-                        <div className={`flex items-center gap-1.5 text-sm ${nodCounts[`item${thread.id}`] ? 'text-blue-600' : 'text-gray-500'} transition`}>
-                          <ThumbsUp className={`w-4 h-4 ${nodCounts[`item${thread.id}`] ? 'fill-blue-600' : ''}`} />
-                          <span className="font-bold">{thread.nods + (nodCounts[`item${thread.id}`] || 0)}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-sm text-gray-500">
-                          <MessageCircle className="w-4 h-4" />
-                          <span className="font-bold">{thread.comments}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-sm text-gray-500">
-                          <Bookmark className="w-4 h-4" />
-                          <span className="font-bold">Save</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="col-span-3">
-            {/* Today's Champions */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                    <Trophy className="w-5 h-5 text-orange-600" />
-                    Today&apos;s Champions
-                  </h3>
-                  <Link href="/leaderboard" className="text-xs text-orange-600 hover:text-orange-700 font-bold">
-                    View All
-                  </Link>
-                </div>
-              </div>
-              <div className="p-2 space-y-3">
-                <Link href="/experts/electrician-ed" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 border-t-4 border-t-blue-500 hover:shadow-sm transition">
-                  <span className="text-lg">🥇</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm text-gray-900">ElectricianEd</div>
-                    <div className="text-xs font-bold text-gray-500">847 nods • 42 helps</div>
-                  </div>
-                </Link>
-                <Link href="/experts/chef-carla" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
-                  <span className="text-lg">🥈</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm text-gray-900">ChefCarla</div>
-                    <div className="text-xs font-bold text-gray-500">623 nods • 31 helps</div>
-                  </div>
-                </Link>
-                <Link href="/experts/mechanic-dave" className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-sm transition">
-                  <span className="text-lg">🥉</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm text-gray-900">MechanicDave</div>
-                    <div className="text-xs font-bold text-gray-500">512 nods • 28 helps</div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* Rising Stars */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mt-6">
-              <div className="px-4 py-3 border-b border-gray-200 bg-blue-50">
-                <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
-                  Rising Stars
-                </h3>
-              </div>
-              <div className="p-2 space-y-3">
-                <Link href="/profile/newbiebob" className="block">
-                  <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm text-gray-900">NewbieBob</span>
-                      <span className="text-xs text-green-600 font-bold">+342 today</span>
-                    </div>
-                    <p className="text-xs font-bold text-gray-600 mt-1">Killer HVAC tip on frozen pipes</p>
-                  </div>
-                </Link>
-                <Link href="/profile/teachertina" className="block">
-                  <div className="p-2 bg-green-50 rounded-lg border border-green-200 hover:border-green-300 transition cursor-pointer">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm text-gray-900">TeacherTina</span>
-                      <span className="text-xs text-green-600 font-bold">+289 today</span>
-                    </div>
-                    <p className="text-xs font-bold text-gray-600 mt-1">Trending in Parenting</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* Quick Tip */}
-            <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 mt-6">
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2">
-                <Lightbulb className="w-5 h-5 text-blue-600" />
-                Did You Know?
-              </h3>
-              <p className="text-sm font-bold text-gray-700">
-                WD-40 stands for &quot;Water Displacement, 40th formula&quot; - it took 40 attempts to get it right!
-              </p>
-              <Link href="/education" className="text-sm text-blue-600 hover:text-blue-700 font-bold mt-2 inline-block">
-                Learn more tips →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  );
-};
-
-export default DadKnowsHomepage;
+  )
+}

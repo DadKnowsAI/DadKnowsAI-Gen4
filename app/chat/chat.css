@@ -1,0 +1,188 @@
+/* Chat Page Styles - Using DADK Color System */
+
+.ai-highlight {
+    color: var(--accent-warning);
+    font-weight: 600;
+    padding: 1px 4px;
+    background: rgba(245, 158, 11, 0.15);
+    border-radius: 4px;
+    animation: highlightPulse 1.5s infinite;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { 
+        background: rgba(245, 158, 11, 0.15);
+    }
+    50% { 
+        background: rgba(245, 158, 11, 0.25);
+    }
+}
+
+/* Chat message animations */
+.chat-message {
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* User message styling */
+.user-message {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 20px 20px 5px 20px;
+    max-width: 70%;
+    position: relative;
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* AI message styling */
+.ai-message {
+    background: var(--chat-purple-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--chat-purple);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border-radius: 20px 20px 20px 5px;
+    max-width: 75%;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(124, 58, 237, 0.2);
+}
+
+/* Expert message styling */
+.expert-message {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--accent-success);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border-radius: 20px 20px 20px 5px;
+    max-width: 75%;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.2);
+}
+
+/* Stat message styling */
+.stat-message {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid var(--accent-warning);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border-radius: 20px;
+    max-width: 75%;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
+    text-align: center;
+}
+
+/* Comment hover effects */
+.comment-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Nod button animation */
+.nod-button:active {
+    transform: scale(0.95);
+}
+
+/* Floating Reactions Animation */
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    20% {
+        transform: translateY(-30px) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-280px) translateX(40px) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+.animate-float-up {
+    animation: floatUp 3s ease-out forwards;
+}
+
+/* Slide in animation for messages */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+/* Pulse animation for live elements */
+@keyframes livePulse {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+    }
+}
+
+.animate-live-pulse {
+    animation: livePulse 2s infinite;
+}
+
+/* Glow effect for interactive elements */
+@keyframes glow {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+    }
+}
+
+.animate-glow {
+    animation: glow 2s infinite;
+}
+
+/* Bounce animation for reactions */
+@keyframes reactionBounce {
+    0%, 100% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.2);
+    }
+}
+
+.animate-reaction-bounce {
+    animation: reactionBounce 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .chat-message {
+        max-width: 90%;
+    }
+    
+    .user-message,
+    .ai-message,
+    .expert-message,
+    .stat-message {
+        max-width: 90%;
+    }
+}
