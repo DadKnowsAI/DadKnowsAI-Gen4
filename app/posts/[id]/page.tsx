@@ -1,6 +1,6 @@
 import PostThreadClient from './PostThreadClient';
 
-const PostPage = ({ params }: { params: { id: string } }) => {
+const PostPage = () => {
   return <PostThreadClient />;
 };
 

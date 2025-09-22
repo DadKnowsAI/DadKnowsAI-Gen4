@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   BookOpen,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ArrowLeft, Crown, Shield, Medal, Target, Calendar,
-  BarChart3, Mail, Phone, MapPin, Globe, Camera,
-  Share2, Send, Bot, User as UserIcon, Award, Star
+  ThumbsUp, MessageCircle,
+  Circle, ArrowLeft, Shield, Award, Calendar,
+  Mail, MapPin, Globe,
+  Share2, Star
 } from 'lucide-react';
 
 const ExpertPage = ({ params }: { params: { id: string } }) => {

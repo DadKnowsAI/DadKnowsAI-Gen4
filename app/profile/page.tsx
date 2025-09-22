@@ -4,18 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus, Crown, Shield,
-  Medal, Target, Calendar, BarChart3, Edit, Settings,
-  Mail, Phone, MapPin, Globe, Camera, Share2
+  Star, BookOpen,
+  ThumbsUp, MessageCircle,
+  Award, Calendar, Edit, Settings,
+  Mail, MapPin, Globe, Share2, MoreHorizontal, Bookmark, Wrench, CheckCircle, Heart, Circle
 } from 'lucide-react';
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('posts');
-  const [isEditing, setIsEditing] = useState(false);
 
   const user = {
     name: 'John Doe',

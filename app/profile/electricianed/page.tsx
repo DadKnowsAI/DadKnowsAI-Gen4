@@ -3,9 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  ArrowLeft, User, Calendar, MapPin, Award, MessageSquare,
-  ThumbsUp, Clock, CheckCircle, Star, Settings, Share2,
-  Wrench, Home, Heart, Zap, Eye, Bookmark, MoreHorizontal, Zap as Electric
+  ArrowLeft, Calendar, MapPin, MessageSquare,
+  ThumbsUp, Settings, Share2
 } from 'lucide-react';
 
 const ElectricianEdProfile = () => {

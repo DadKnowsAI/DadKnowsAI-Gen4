@@ -4,12 +4,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Home, Users, Trophy, MessageSquare, Bell, Search, BookOpen,
+  Home, Users, BookOpen,
   Brain, Lightbulb, HelpCircle, Shield, Zap, Target,
-  PlayCircle, CheckCircle, AlertCircle,
-  User, Bot, ThumbsUp, MessageCircle, ChevronRight,
-  Sparkles, Lock, Unlock, Award, Clock, Star,
-  ArrowRight, Info, BookMarked, Video, FileText
+  PlayCircle, AlertCircle,
+  Bot, ThumbsUp, ChevronRight,
+  Sparkles, Award, Clock, Star,
+  BookMarked, Video, FileText, Search
 } from 'lucide-react';
 
 const EducationHub = () => {
@@ -380,9 +380,9 @@ const EducationHub = () => {
                   <span className="text-gray-700 font-bold">See how experts validate answers</span>
                 </li>
               </ol>
-              <a href="/chat" className="mt-4 block w-full bg-blue-600 text-white text-center py-2 rounded-lg font-bold hover:bg-blue-700 transition">
+              <Link href="/chat" className="mt-4 block w-full bg-blue-600 text-white text-center py-2 rounded-lg font-bold hover:bg-blue-700 transition">
                 Try Dad AI Now
-              </a>
+              </Link>
             </div>
 
             {/* Your Progress */}

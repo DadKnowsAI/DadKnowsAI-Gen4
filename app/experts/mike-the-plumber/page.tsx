@@ -3,10 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  ArrowLeft, User, Calendar, MapPin, Award, MessageSquare,
-  ThumbsUp, Clock, CheckCircle, Star, Settings, Share2,
-  Wrench, Home, Heart, Zap, Eye, Bookmark, MoreHorizontal,
-  Crown, Shield, TrendingUp
+  ArrowLeft, Calendar, MapPin, Award, MessageSquare,
+  ThumbsUp, CheckCircle, Settings, Share2,
+  Wrench
 } from 'lucide-react';
 
 const MikeThePlumberProfile = () => {

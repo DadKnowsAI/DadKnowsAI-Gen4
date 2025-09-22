@@ -4,12 +4,10 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
+  TrendingUp, Star, BookOpen,
   Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus, Crown, Shield,
-  Medal, Target, Calendar, BarChart3
+  Crown, Shield,
+  Medal, Target, BarChart3
 } from 'lucide-react';
 
 const LeaderboardPage = () => {

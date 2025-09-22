@@ -80,6 +80,136 @@ export default function LiveFeedPage() {
     }
   ]
 
+  const playChat = (chatId: string) => {
+    const container = document.querySelector(`[data-chat-id="${chatId}"]`) as HTMLElement
+    if (!container) return
+    
+    const messages = container.querySelectorAll('.chat-message')
+    const typingIndicator = container.querySelector('.typing-indicator') as HTMLElement
+    const confidenceMeters = container.querySelectorAll('.confidence-meter')
+    const confidenceFills = container.querySelectorAll('.confidence-fill')
+    const verifications = container.querySelectorAll('.expert-verification')
+    const successFlash = container.querySelector('.success-flash') as HTMLElement
+    
+    // Reset all elements
+    messages.forEach(msg => msg.classList.remove('show'))
+    if (typingIndicator) typingIndicator.classList.remove('show')
+    confidenceMeters.forEach(m => m.classList.remove('show'))
+    confidenceFills.forEach(f => f.classList.remove('show'))
+    verifications.forEach(v => v.classList.remove('show'))
+    if (successFlash) successFlash.classList.remove('show')
+    
+    let messageIndex = 0
+    let confidenceIndex = 0
+    
+    const showNextMessage = () => {
+      if (messageIndex < messages.length) {
+        const message = messages[messageIndex] as HTMLElement
+        const template = conversationTemplates.find(t => 
+          t.messages.some(m => m.text === message.textContent?.trim())
+        )
+        
+        if (template) {
+          const currentMessage = template.messages[messageIndex]
+          
+          // Show typing indicator for AI messages
+          if (currentMessage.type === 'ai' && typingIndicator) {
+            typingIndicator.classList.add('show')
+            setTimeout(() => {
+              typingIndicator.classList.remove('show')
+              message.classList.add('show')
+            }, 500)
+          } else {
+            message.classList.add('show')
+          }
+          
+          // Show confidence meter for AI messages
+          if (currentMessage.type === 'ai' && confidenceIndex < confidenceMeters.length) {
+            setTimeout(() => {
+              const meter = confidenceMeters[confidenceIndex] as HTMLElement
+              const fill = confidenceFills[confidenceIndex] as HTMLElement
+              meter.classList.add('show')
+              
+              // Animate confidence fill
+              setTimeout(() => {
+                const confidence = Math.random() * 30 + 70 // 70-100%
+                fill.style.width = `${confidence}%`
+              }, 200)
+              
+              confidenceIndex++
+            }, 300)
+          }
+          
+          // Show expert verification
+          if (currentMessage.type === 'expert' && confidenceIndex < verifications.length) {
+            setTimeout(() => {
+              verifications[confidenceIndex - 1]?.classList.add('show')
+            }, 500)
+          }
+          
+          // Show success flash
+          if (currentMessage.success && successFlash) {
+            setTimeout(() => {
+              successFlash.classList.add('show')
+              setTimeout(() => successFlash.classList.remove('show'), 1000)
+            }, 200)
+          }
+        }
+        
+        messageIndex++
+        setTimeout(showNextMessage, template?.messages[messageIndex - 1]?.delay || 800)
+      }
+    }
+    
+    showNextMessage()
+  }
+
+  const createReactions = () => {
+    const reactions = ['👍', '❤️', '🔥', '💡', '✅', '🎉']
+    const reaction = reactions[Math.floor(Math.random() * reactions.length)]
+    
+    const reactionEl = document.createElement('div')
+    reactionEl.className = 'floating-reaction'
+    reactionEl.textContent = reaction
+    reactionEl.style.left = Math.random() * window.innerWidth + 'px'
+    reactionEl.style.animationDuration = (Math.random() * 2 + 2) + 's'
+    
+    document.body.appendChild(reactionEl)
+    
+    setTimeout(() => {
+      reactionEl.remove()
+    }, 4000)
+  }
+
+  const loadMoreCards = () => {
+    if (loading) return
+    setLoading(true)
+    
+    const loader = document.getElementById('loader')
+    if (loader) loader.style.display = 'block'
+    
+    setTimeout(() => {
+      for (let i = 0; i < 3; i++) {
+        const template = conversationTemplates[Math.floor(Math.random() * conversationTemplates.length)]
+        const { html } = generateChatCard(template)
+        
+        const card = document.createElement('div')
+        card.className = 'knowledge-card live-card'
+        card.style.background = `linear-gradient(135deg, hsl(${Math.random() * 60 + 200}, 30%, 10%) 0%, hsl(${Math.random() * 60 + 240}, 40%, 20%) 100%)`
+        card.innerHTML = html
+        
+        document.querySelector('.feed-container')?.insertBefore(card, loader)
+        
+        if (observerRef.current) {
+          observerRef.current.observe(card)
+        }
+      }
+      
+      if (loader) loader.style.display = 'none'
+      setLoading(false)
+    }, 500)
+  }
+
   useEffect(() => {
     // Set up intersection observer for chat animations
     observerRef.current = new IntersectionObserver((entries) => {
@@ -131,91 +261,9 @@ export default function LiveFeedPage() {
         observerRef.current.disconnect()
       }
     }
-  }, [])
+  }, [createReactions, loadMoreCards, playChat])
 
-  const playChat = (chatId: string) => {
-    const container = document.querySelector(`[data-chat-id="${chatId}"]`) as HTMLElement
-    if (!container) return
-    
-    const messages = container.querySelectorAll('.chat-message')
-    const typingIndicator = container.querySelector('.typing-indicator') as HTMLElement
-    const confidenceMeters = container.querySelectorAll('.confidence-meter')
-    const confidenceFills = container.querySelectorAll('.confidence-fill')
-    const verifications = container.querySelectorAll('.expert-verification')
-    const successFlash = container.querySelector('.success-flash') as HTMLElement
-    
-    // Reset all elements
-    messages.forEach(msg => msg.classList.remove('show'))
-    if (typingIndicator) typingIndicator.classList.remove('show')
-    confidenceMeters.forEach(m => m.classList.remove('show'))
-    confidenceFills.forEach(f => f.classList.remove('animate'))
-    verifications.forEach(v => v.classList.remove('show'))
-    
-    // Play sequence
-    messages.forEach((message) => {
-      const msgElement = message as HTMLElement
-      const delay = parseInt(msgElement.dataset.delay || '0')
-      
-      setTimeout(() => {
-        if (message.classList.contains('ai-message') && typingIndicator) {
-          typingIndicator.classList.add('show')
-          setTimeout(() => {
-            typingIndicator.classList.remove('show')
-            message.classList.add('show')
-            
-            if (Math.random() > 0.5) {
-              createReactionEmoji(container as HTMLElement)
-            }
-          }, 200)
-        } else {
-          message.classList.add('show')
-          
-          if (message.querySelector('.user-bubble[style*="4CAF50"]')) {
-            if (successFlash) {
-              successFlash.classList.add('show')
-              setTimeout(() => successFlash.classList.remove('show'), 500)
-            }
-          }
-        }
-      }, delay)
-    })
-    
-    // Animate confidence meters
-    confidenceMeters.forEach((meter, index) => {
-      const meterElement = meter as HTMLElement
-      const fill = confidenceFills[index] as HTMLElement
-      const meterDelay = parseInt(meterElement.dataset.delay || String(1000 + index * 200))
-      setTimeout(() => {
-        meter.classList.add('show')
-        if (fill) {
-          setTimeout(() => {
-            fill.classList.add('animate')
-          }, 100)
-        }
-      }, meterDelay)
-    })
-    
-    // Show verifications
-    verifications.forEach((verification, index) => {
-      const verifyElement = verification as HTMLElement
-      const verifyDelay = parseInt(verifyElement.dataset.delay || String(1200 + index * 200))
-      setTimeout(() => {
-        verifyElement.style.display = 'flex'
-        verification.classList.add('show')
-      }, verifyDelay)
-    })
-  }
 
-  const createReactionEmoji = (container: HTMLElement) => {
-    const reactions = ['❤️', '👍', '🔥', '💯', '🙌', '✨', '💪', '🎯']
-    const emoji = document.createElement('div')
-    emoji.className = 'reaction-emoji'
-    emoji.textContent = reactions[Math.floor(Math.random() * reactions.length)]
-    emoji.style.left = Math.random() * 100 + 'px'
-    emoji.style.bottom = '100px'
-    container.appendChild(emoji)
-    setTimeout(() => emoji.remove(), 2000)
-  }
 
   const createFloatingReaction = (containerId: string) => {
     const container = document.getElementById(containerId)
@@ -232,13 +280,6 @@ export default function LiveFeedPage() {
     setTimeout(() => reaction.remove(), 3000)
   }
 
-  const createReactions = () => {
-    document.querySelectorAll('.reaction-stream').forEach(stream => {
-      if (Math.random() > 0.7) {
-        createFloatingReaction(stream.id)
-      }
-    })
-  }
 
   const addRandomComment = () => {
     const comments = [
@@ -386,36 +427,6 @@ export default function LiveFeedPage() {
     return { html: cardHTML, id: chatId }
   }
 
-  const loadMoreCards = () => {
-    if (loading) return
-    setLoading(true)
-    
-    const loader = document.getElementById('loader')
-    if (loader) loader.style.display = 'block'
-    
-    setTimeout(() => {
-      for (let i = 0; i < 3; i++) {
-        const template = conversationTemplates[Math.floor(Math.random() * conversationTemplates.length)]
-        const { html } = generateChatCard(template)
-        
-        const card = document.createElement('div')
-        card.className = 'knowledge-card live-card'
-        card.style.background = `linear-gradient(135deg, hsl(${Math.random() * 60 + 200}, 30%, 10%) 0%, hsl(${Math.random() * 60 + 240}, 40%, 20%) 100%)`
-        card.innerHTML = html
-        
-        document.querySelector('.feed-container')?.insertBefore(card, loader)
-        
-        if (observerRef.current) {
-          observerRef.current.observe(card)
-        }
-        
-        // Remove unused cardsGenerated increment
-      }
-      
-      if (loader) loader.style.display = 'none'
-      setLoading(false)
-    }, 500)
-  }
 
   const handleEngagementClick = (e: React.MouseEvent) => {
     const btn = (e.target as HTMLElement).closest('.engagement-btn')

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { 
   ArrowLeft, Users, Trophy, Clock, 
   CheckCircle, MessageSquare, Lightbulb, 
-  ArrowRight, Lock, Star
+  ArrowRight, Star
 } from 'lucide-react';
 
 interface LessonContent {

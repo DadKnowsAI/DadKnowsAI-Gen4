@@ -28,7 +28,6 @@ export default function ThreadPage() {
   const [inputText, setInputText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [liveUsers, setLiveUsers] = useState<LiveUser[]>([])
-  const [userPoints, setUserPoints] = useState(0)
   const [showAchievement, setShowAchievement] = useState(false)
   const [achievementText, setAchievementText] = useState('')
 
@@ -95,6 +94,55 @@ export default function ThreadPage() {
     { name: 'FixItFred', status: 'Helper', avatar: 'FF' }
   ]
 
+  const createFloatingReaction = () => {
+    const reactions = ['❤️', '👍', '🔥', '💯', '🙌', '✨', '💪', '🎯']
+    const container = document.getElementById('floatingReactions')
+    if (!container) return
+
+    const emoji = document.createElement('div')
+    emoji.className = 'floating-emoji'
+    emoji.textContent = reactions[Math.floor(Math.random() * reactions.length)]
+    emoji.style.left = Math.random() * 80 + 'px'
+    container.appendChild(emoji)
+    setTimeout(() => emoji.remove(), 3000)
+  }
+
+  const simulateUserJoin = () => {
+    if (Math.random() > 0.8) {
+      const newUser = {
+        name: `User${Math.floor(Math.random() * 999)}`,
+        status: 'Just joined',
+        avatar: 'U' + Math.floor(Math.random() * 9)
+      }
+      
+      setLiveUsers(prev => {
+        const updated = [...prev, newUser]
+        if (updated.length > 8) updated.shift()
+        return updated
+      })
+      
+      showAchievementToast(`👤 ${newUser.name} joined the chat!`)
+    }
+  }
+
+  const showTrendingNotification = () => {
+    if (Math.random() > 0.85) {
+      const notifications = [
+        "This thread is trending! 🔥",
+        "47 people found this helpful",
+        "Similar issue solved 2 hours ago",
+        "Expert verified solution ✅"
+      ]
+      showAchievementToast(notifications[Math.floor(Math.random() * notifications.length)])
+    }
+  }
+
+  const showAchievementToast = (text: string) => {
+    setAchievementText(text)
+    setShowAchievement(true)
+    setTimeout(() => setShowAchievement(false), 3000)
+  }
+
   useEffect(() => {
     // Initialize chat with delayed message loading for animation
     initialMessages.forEach((msg, index) => {
@@ -115,7 +163,7 @@ export default function ThreadPage() {
       clearInterval(userJoinInterval)
       clearInterval(trendingInterval)
     }
-  }, [])
+  }, [initialMessages, initialLiveUsers, createFloatingReaction, simulateUserJoin, showTrendingNotification])
 
   useEffect(() => {
     // Scroll to bottom when new messages arrive
@@ -165,7 +213,6 @@ export default function ThreadPage() {
 
       setIsTyping(false)
       setMessages(prev => [...prev, aiMessage])
-      awardPoints(10)
 
       // Random expert chime in
       if (Math.random() > 0.6) {
@@ -190,7 +237,6 @@ export default function ThreadPage() {
     }))
     
     createFloatingReaction()
-    awardPoints(5)
   }
 
   const addExpertMessage = () => {
@@ -217,67 +263,6 @@ export default function ThreadPage() {
     setMessages(prev => [...prev, expertMessage])
   }
 
-  const createFloatingReaction = () => {
-    const reactions = ['❤️', '👍', '🔥', '💯', '🙌', '✨', '💪', '🎯']
-    const container = document.getElementById('floatingReactions')
-    if (!container) return
-
-    const emoji = document.createElement('div')
-    emoji.className = 'floating-emoji'
-    emoji.textContent = reactions[Math.floor(Math.random() * reactions.length)]
-    emoji.style.left = Math.random() * 80 + 'px'
-    container.appendChild(emoji)
-    setTimeout(() => emoji.remove(), 3000)
-  }
-
-  const awardPoints = (points: number) => {
-    const newPoints = userPoints + points
-    setUserPoints(newPoints)
-    
-    if (newPoints >= 50 && userPoints < 50) {
-      showAchievementToast('🎯 Active Participant! +50 points')
-    } else if (newPoints >= 100 && userPoints < 100) {
-      showAchievementToast('🏆 Problem Solver! +100 points')
-    } else if (newPoints >= 200 && userPoints < 200) {
-      showAchievementToast('⭐ Community Hero! +200 points')
-    }
-  }
-
-  const showAchievementToast = (text: string) => {
-    setAchievementText(text)
-    setShowAchievement(true)
-    setTimeout(() => setShowAchievement(false), 3000)
-  }
-
-  const simulateUserJoin = () => {
-    if (Math.random() > 0.8) {
-      const newUser = {
-        name: `User${Math.floor(Math.random() * 999)}`,
-        status: 'Just joined',
-        avatar: 'U' + Math.floor(Math.random() * 9)
-      }
-      
-      setLiveUsers(prev => {
-        const updated = [...prev, newUser]
-        if (updated.length > 8) updated.shift()
-        return updated
-      })
-      
-      showAchievementToast(`👤 ${newUser.name} joined the chat!`)
-    }
-  }
-
-  const showTrendingNotification = () => {
-    if (Math.random() > 0.85) {
-      const notifications = [
-        "This thread is trending! 🔥",
-        "47 people found this helpful",
-        "Similar issue solved 2 hours ago",
-        "Expert verified solution ✅"
-      ]
-      showAchievementToast(notifications[Math.floor(Math.random() * notifications.length)])
-    }
-  }
 
   return (
     <div className="thread-wrapper">

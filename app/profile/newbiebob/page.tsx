@@ -4,24 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus, Crown, Shield,
-  ExternalLink, User, Calendar, MapPin, Mail, Phone
+  ThumbsUp, MessageCircle,
+  Calendar, MapPin, BookOpen, ArrowLeft
 } from 'lucide-react';
 
 const NewbieBobProfile = () => {
   const [activeTab, setActiveTab] = useState('posts');
-  const [nodCounts, setNodCounts] = useState<Record<string, number>>({});
-
-  const handleNod = (itemId: string) => {
-    setNodCounts(prev => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1
-    }));
-  };
 
   const userStats = {
     totalNods: 1247,

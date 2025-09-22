@@ -3,15 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Home, Users, Trophy, MessageSquare, Bell, Search, 
-  TrendingUp, Clock, CheckCircle, Star, BookOpen,
-  Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  ThumbsUp, MessageCircle, Bookmark, MoreHorizontal,
-  Circle, ChevronRight, Award, Lightbulb, HelpCircle,
-  ArrowLeft, Filter, Grid, List, Plus, Crown, Shield,
-  Medal, Target, Calendar, BarChart3, Edit, Settings,
-  Mail, Phone, MapPin, Globe, Camera, Share2, Eye as EyeIcon,
-  EyeOff, Lock, User as UserIcon
+  Mail, Lock, EyeOff, Eye as EyeIcon
 } from 'lucide-react';
 
 const LoginPage = () => {
