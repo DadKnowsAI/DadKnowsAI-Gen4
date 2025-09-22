@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import HeaderNav from '../../components/HeaderNav'
 import '../../thread.css'
 
@@ -23,8 +22,6 @@ interface LiveUser {
 }
 
 export default function ThreadPage() {
-  const params = useParams()
-  const router = useRouter()
   const chatContainerRef = useRef<HTMLDivElement>(null)
   
   const [messages, setMessages] = useState<Message[]>([])
@@ -474,7 +471,7 @@ export default function ThreadPage() {
                 <span className="comment-author">SarahM</span>
                 <span className="comment-time">1h</span>
               </div>
-              <div className="comment-text">I've been doing this wrong for years! Game changer 🔥</div>
+              <div className="comment-text">I&apos;ve been doing this wrong for years! Game changer 🔥</div>
               <div className="comment-actions">
                 <button className="comment-action">👍 8</button>
                 <button className="comment-action">Reply</button>

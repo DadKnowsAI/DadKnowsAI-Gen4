@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, ThumbsUp, MessageCircle, Bookmark, Share2, 
-  Send, User, Clock, CheckCircle, Star, MoreHorizontal,
-  Zap, Heart, Laugh, Angry, Wifi, Users, Activity
+  Send, User, Clock, Users, Activity
 } from 'lucide-react';
 import HeaderNav from '../../components/HeaderNav';
 import '../chat.css';
@@ -69,7 +68,6 @@ const ChatPage = ({ params }: { params: { id: string } }) => {
   const [floatingReactions, setFloatingReactions] = useState<Array<{id: string, emoji: string, x: number, y: number}>>([]);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
   const [messageAnimations, setMessageAnimations] = useState<Record<string, boolean>>({});
 
   // Sample chat data based on the ID

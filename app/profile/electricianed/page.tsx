@@ -126,9 +126,9 @@ const ElectricianEdProfile = () => {
                   </div>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">Outlet keeps tripping breaker - what's wrong?</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Outlet keeps tripping breaker - what&apos;s wrong?</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Most likely a short circuit or overload. First, unplug everything from that outlet. If it still trips, there's a wiring issue - call a pro immediately. If it stops tripping, one of your devices is the problem. Test them one by one.
+                  Most likely a short circuit or overload. First, unplug everything from that outlet. If it still trips, there&apos;s a wiring issue - call a pro immediately. If it stops tripping, one of your devices is the problem. Test them one by one.
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-yellow-600">
@@ -159,9 +159,9 @@ const ElectricianEdProfile = () => {
                   </div>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">GFCI outlet won't reset - help!</h3>
+                <h3 className="font-bold text-gray-900 mb-2">GFCI outlet won&apos;t reset - help!</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Try pressing the "Test" button first, then "Reset". If it won't stay reset, there's still a fault. Check for water damage or loose connections. Sometimes it's a downstream outlet causing the issue. If unsure, call an electrician - GFCIs protect your family!
+                  Try pressing the &quot;Test&quot; button first, then &quot;Reset&quot;. If it won&apos;t stay reset, there&apos;s still a fault. Check for water damage or loose connections. Sometimes it&apos;s a downstream outlet causing the issue. If unsure, call an electrician - GFCIs protect your family!
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-yellow-600">

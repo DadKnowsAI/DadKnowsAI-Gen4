@@ -128,7 +128,7 @@ const JohnDad42Profile = () => {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Car clicking when turning - CV joint issue?</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Yes, that clicking sound when turning is classic CV joint failure. You'll need to replace the CV axle. Cost is around $280-400 depending on your car. The clicking gets worse over time, so don't wait too long!
+                  Yes, that clicking sound when turning is classic CV joint failure. You&apos;ll need to replace the CV axle. Cost is around $280-400 depending on your car. The clicking gets worse over time, so don&apos;t wait too long!
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-blue-600">
@@ -161,7 +161,7 @@ const JohnDad42Profile = () => {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Engine light on - what should I check first?</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  First, check your gas cap - loose cap is the #1 cause! If that's tight, check oil level and coolant. Most auto parts stores will read the code for free. Don't ignore it - small problems become expensive fast.
+                  First, check your gas cap - loose cap is the #1 cause! If that&apos;s tight, check oil level and coolant. Most auto parts stores will read the code for free. Don&apos;t ignore it - small problems become expensive fast.
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-blue-600">

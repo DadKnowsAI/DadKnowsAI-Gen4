@@ -161,7 +161,7 @@ const MechanicDaveProfile = () => {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Brake pedal goes to floor - emergency!</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  STOP DRIVING IMMEDIATELY! This is a brake fluid leak or master cylinder failure. Check brake fluid level first. If it's low, you have a leak - call a tow truck. If fluid is full, master cylinder is bad. Either way, this is not safe to drive!
+                  STOP DRIVING IMMEDIATELY! This is a brake fluid leak or master cylinder failure. Check brake fluid level first. If it&apos;s low, you have a leak - call a tow truck. If fluid is full, master cylinder is bad. Either way, this is not safe to drive!
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-red-600">

@@ -24,7 +24,6 @@ interface ConversationTemplate {
 
 export default function LiveFeedPage() {
   const [nodCounter, setNodCounter] = useState(8299)
-  const [cardsGenerated, setCardsGenerated] = useState(3)
   const [loading, setLoading] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
@@ -397,7 +396,7 @@ export default function LiveFeedPage() {
     setTimeout(() => {
       for (let i = 0; i < 3; i++) {
         const template = conversationTemplates[Math.floor(Math.random() * conversationTemplates.length)]
-        const { html, id } = generateChatCard(template)
+        const { html } = generateChatCard(template)
         
         const card = document.createElement('div')
         card.className = 'knowledge-card live-card'
@@ -410,7 +409,7 @@ export default function LiveFeedPage() {
           observerRef.current.observe(card)
         }
         
-        setCardsGenerated(prev => prev + 1)
+        // Remove unused cardsGenerated increment
       }
       
       if (loader) loader.style.display = 'none'

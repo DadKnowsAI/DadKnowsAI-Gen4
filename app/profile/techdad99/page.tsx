@@ -126,9 +126,9 @@ const TechDad99Profile = () => {
                   </div>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">SOLVED</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">WiFi keeps dropping - kids can't do homework!</h3>
+                <h3 className="font-bold text-gray-900 mb-2">WiFi keeps dropping - kids can&apos;t do homework!</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Try restarting your router first (unplug for 30 seconds). If that doesn't work, check for interference from other devices. Move the router away from microwaves, baby monitors, or cordless phones. Also try changing the WiFi channel in router settings.
+                  Try restarting your router first (unplug for 30 seconds). If that doesn&apos;t work, check for interference from other devices. Move the router away from microwaves, baby monitors, or cordless phones. Also try changing the WiFi channel in router settings.
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-green-600">
@@ -161,7 +161,7 @@ const TechDad99Profile = () => {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Phone storage full - how to free up space?</h3>
                 <p className="text-sm font-bold text-gray-600 mb-3">
-                  Start with photos and videos - they take the most space. Use Google Photos or iCloud to backup and delete from device. Clear app cache in settings, delete unused apps, and empty your trash. For iPhone, try "Offload Unused Apps" in storage settings.
+                  Start with photos and videos - they take the most space. Use Google Photos or iCloud to backup and delete from device. Clear app cache in settings, delete unused apps, and empty your trash. For iPhone, try &quot;Offload Unused Apps&quot; in storage settings.
                 </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1.5 text-sm text-green-600">

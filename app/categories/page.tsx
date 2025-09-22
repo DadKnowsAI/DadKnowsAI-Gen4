@@ -6,7 +6,7 @@ import {
   Home, Users, Trophy, MessageSquare, Bell, Search, 
   BookOpen,
   Wrench, Car, ChefHat, Baby, Heart, Zap, Eye,
-  Circle, ArrowLeft, Plus, Grid, List, ChevronRight, Award
+  Circle, Plus, Grid, List, ChevronRight, Award
 } from 'lucide-react';
 
 const CategoriesPage = () => {
